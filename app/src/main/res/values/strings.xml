@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Link Talk</string>
+
+    <string name="common_generic_error_title">Something went wrong</string>
+    <string name="common_generic_error_message">Please try again or report a problem</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add_profile_photo">Add profile picture</string>
+    <string name="common_take_photo">Take photo</string>
+    <string name="common_upload_photo">Gallery</string>
+
+    <string name="error_message_invalid_username_or_password">Incorrect email or password</string>
+    <string name="error_message_user_with_username_already_exists">User with the provided email already exists in the system</string>
+    <string name="error_message_field_blank">%1s is mandatory</string>
+    <string name="error_message_password_less_than_eight_chars">Password must contain at least 8 characters</string>
+    <string name="error_message_password_invalid">Password must contain at least one letter and number</string>
+    <string name="error_message_password_confirmation_invalid">Password confirmation does not match</string>
+    <string name="error_message_email_invalid">Invalid email</string>
+
+    <string name="feature_login_email">E-mail</string>
+    <string name="feature_login_password">Password</string>
+    <string name="feature_login_button">Login</string>
+    <string name="feature_login_no_account">Don\'t have an account?</string>
+    <string name="feature_login_register">Register here</string>
+
+    <string name="feature_sign_up_change_profile_photo">Change profile picture</string>
+    <string name="feature_sign_up_first_name">First name</string>
+    <string name="feature_sign_up_last_name">Last name</string>
+    <string name="feature_sign_up_email">E-mail</string>
+    <string name="feature_sign_up_password">Password</string>
+    <string name="feature_sign_up_password_confirmation">Confirm password</string>
+    <string name="feature_sign_up_button">Register</string>
+    <string name="feature_sign_up_passwords_match">the passwords are the same</string>
+    <string name="feature_sign_up_has_account">Already have an account?</string>
+    <string name="feature_sign_up_login_here">Log in</string>
+
+    <string name="splash_safety_info">Secure, encrypted and private messaging</string>
+
+</resources>
