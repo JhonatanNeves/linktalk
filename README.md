@@ -2,7 +2,7 @@
 
 [FIGMA](https://www.figma.com/design/39yq2GG79kH2MFSRVnlhrb/LinkTalk-Project?t=dwGhGdt52pQXon4Z-0)
 
-<img width="871" alt="Captura de Tela 2024-12-16 às 18 52 44" src="" />
+<img width="1100" alt="Captura de Tela 2024-12-16 às 18 52 44" src="https://github.com/user-attachments/assets/f98e4d8b-78b4-4934-813d-39f46f2646ef" />
 
 ## Como a aplicação funciona?
 O aplicativo deve exibir uma lista de contatos e conversas administrados no back-end, podendo criar um perfil personalizado de usuário , podendo interarir com outros usuários atraves de chat.
