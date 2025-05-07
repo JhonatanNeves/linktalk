@@ -59,5 +59,3 @@ Rode em um dispositivo/emulador Android
 ---
 
 #### O LinkTalk é uma aplicação de chat desenvolvido do absoluto zero, colocando em prática conhecimento voltado ao mercado, utilizando tecnologias modernas no desenvolvimento Anrdoid moderno.
-
-teste
