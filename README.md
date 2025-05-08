@@ -11,12 +11,12 @@ O aplicativo deve exibir uma lista de contatos e conversas administrados no back
 ## Funcionalidades?
 
 - [x] Tela de Login (Com email e senha);
-- [x] Login com conta existente (Google, Facebook, etc.);
+- [ ] Login com conta existente (Google, Facebook, etc.);
 - [x] Tela de splash personalizada;
-- [x] Perfil do Usuário;
-- [x] Contatos;
-- [x] Conversas Lista de chats recentes com prévia da última mensagem;
-- [x] Chat individual;
+- [ ] Perfil do Usuário;
+- [ ] Contatos;
+- [ ] Conversas Lista de chats recentes com prévia da última mensagem;
+- [ ] Chat individual;
 
 ## 🛠 Principais Tecnologias utilizadas
 
