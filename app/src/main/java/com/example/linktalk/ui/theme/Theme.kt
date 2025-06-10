@@ -54,7 +54,7 @@ private val LightColorScheme = lightColorScheme(
 fun LinkTalkTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,  // IMPORTANTE FALSE PARA APLICAR A COR PRIMARIA
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

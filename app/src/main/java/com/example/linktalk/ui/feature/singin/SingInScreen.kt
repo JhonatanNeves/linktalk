@@ -11,10 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -24,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.linktalk.R
 import com.example.linktalk.ui.components.PrimaryButton
 import com.example.linktalk.ui.components.PrimaryTextField
@@ -31,12 +28,21 @@ import com.example.linktalk.ui.theme.BackgroundGradient
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
-fun SingInRoute() {
-    SingInScreen()
+fun SingInRoute(
+    viewModel: SingInViewModel = viewModel()
+) {
+    val formState = viewModel.formState
+    SingInScreen(
+        formState = formState,
+        onFormEvent = viewModel::onFormEvent
+    )
 }
 
 @Composable
-fun SingInScreen() {
+fun SingInScreen(
+    formState: SingInFormState,
+    onFormEvent: (SingInFormEvent) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,14 +58,10 @@ fun SingInScreen() {
 
         Spacer(modifier = Modifier.height(78.dp))
 
-        var email by remember {
-            mutableStateOf("")
-        }
-
         PrimaryTextField(
-            value = email,
+            value = formState.email,
             onValueChange = {
-                email = it
+                onFormEvent(SingInFormEvent.EmailChanged(it))
             },
             modifier = Modifier
                 .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
@@ -69,15 +71,10 @@ fun SingInScreen() {
         )
 
         Spacer(modifier = Modifier.height(14.dp))
-
-        var password by remember {
-            mutableStateOf("")
-        }
-
         PrimaryTextField(
-            value = password,
+            value = formState.password,
             onValueChange = {
-                password = it
+               onFormEvent(SingInFormEvent.PasswordChanged(it))
             },
             modifier = Modifier
                 .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
@@ -88,18 +85,14 @@ fun SingInScreen() {
         )
         Spacer(modifier = Modifier.height(98.dp))
 
-        var isLoading by remember {
-            mutableStateOf(false)
-        }
-
         PrimaryButton(
             text = stringResource(id = R.string.feature_login_button),
             onClick = {
-                isLoading = true
+                onFormEvent(SingInFormEvent.Submit)
             },
             modifier = Modifier
                 .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
-            isLoading = isLoading,
+            isLoading = formState.isLoading,
 
         )
     }
@@ -109,6 +102,9 @@ fun SingInScreen() {
 @Composable
 private fun SingInScreenPreview() {
     LinkTalkTheme {
-        SingInScreen()
+        SingInScreen(
+            formState = SingInFormState(),
+            onFormEvent = {},
+        )
     }
 }
