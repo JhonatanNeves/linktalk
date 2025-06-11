@@ -68,6 +68,7 @@ fun SingInScreen(
             placeholder = stringResource(id = R.string.feature_login_email),
             leadingIcon = R.drawable.ic_envelope,
             keyboardType = KeyboardType.Email,
+            errorMessage = formState.emailError?.let { stringResource(id = it) },
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -82,6 +83,7 @@ fun SingInScreen(
             leadingIcon = R.drawable.ic_lock,
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
+            errorMessage = formState.passwordError?.let { stringResource(id = it) },
         )
         Spacer(modifier = Modifier.height(98.dp))
 

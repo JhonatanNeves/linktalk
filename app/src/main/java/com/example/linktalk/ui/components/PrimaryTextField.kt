@@ -103,7 +103,7 @@ fun PrimaryTextField(
                 text = it,
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp),
                 color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }
@@ -111,13 +111,27 @@ fun PrimaryTextField(
 
 @Preview
 @Composable
-private fun PrimaryTextFieldPreview() {
+private fun PrimaryTextFieldEmailPreview() {
     LinkTalkTheme {
         PrimaryTextField(
             value = "",
             onValueChange = {},
             placeholder = "Email",
-            errorMessage = "Password Required",
+            leadingIcon = R.drawable.ic_envelope,
+            keyboardType = KeyboardType.Password,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PrimaryTextFieldErrorPreview() {
+    LinkTalkTheme {
+        PrimaryTextField(
+            value = "",
+            onValueChange = {},
+            placeholder = "Password",
+            errorMessage = "Invalid Password",
             leadingIcon = R.drawable.ic_envelope,
             keyboardType = KeyboardType.Password,
         )
