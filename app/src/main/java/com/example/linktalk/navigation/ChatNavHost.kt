@@ -16,7 +16,7 @@ object SplashRoute
 object SingInRoute
 
 @Serializable
-object SingInUp
+object SingUpRoute
 
 @Composable
 fun ChatNavHost() {
@@ -38,8 +38,12 @@ fun ChatNavHost() {
             )
         }
         composable<SingInRoute> {
-            SingInRoute()
+            SingInRoute(
+                navigateToSignUp = {
+                    navController.navigate(SingUpRoute)
+                }
+            )
         }
-        composable<SingInUp> {  }
+        composable<SingUpRoute> {  }
     }
 }

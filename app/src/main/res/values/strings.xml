@@ -20,7 +20,7 @@
     <string name="feature_login_password">Password</string>
     <string name="feature_login_button">Login</string>
     <string name="feature_login_no_account">Don\'t have an account?</string>
-    <string name="feature_login_register">Register here</string>
+    <string name="feature_login_register">Sing Up</string>
 
     <string name="feature_sign_up_change_profile_photo">Change profile picture</string>
     <string name="feature_sign_up_first_name">First name</string>
