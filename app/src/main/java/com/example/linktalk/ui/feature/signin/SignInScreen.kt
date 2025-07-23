@@ -1,4 +1,4 @@
-package com.example.linktalk.ui.feature.singin
+package com.example.linktalk.ui.feature.signin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,7 +37,7 @@ import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
 fun SingInRoute(
-    viewModel: SingInViewModel = viewModel(),
+    viewModel: SignInViewModel = viewModel(),
     navigateToSignUp: () -> Unit,
 ) {
     val formState = viewModel.formState
@@ -50,8 +50,8 @@ fun SingInRoute(
 
 @Composable
 fun SingInScreen(
-    formState: SingInFormState,
-    onFormEvent: (SingInFormEvent) -> Unit,
+    formState: SignInFormState,
+    onFormEvent: (SignInFormEvent) -> Unit,
     onRegisterClick: () -> Unit,
 ) {
     Column(
@@ -72,7 +72,7 @@ fun SingInScreen(
         PrimaryTextField(
             value = formState.email,
             onValueChange = {
-                onFormEvent(SingInFormEvent.EmailChanged(it))
+                onFormEvent(SignInFormEvent.EmailChanged(it))
             },
             modifier = Modifier
                 .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
@@ -86,7 +86,7 @@ fun SingInScreen(
         PrimaryTextField(
             value = formState.password,
             onValueChange = {
-                onFormEvent(SingInFormEvent.PasswordChanged(it))
+                onFormEvent(SignInFormEvent.PasswordChanged(it))
             },
             modifier = Modifier
                 .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
@@ -101,7 +101,7 @@ fun SingInScreen(
         PrimaryButton(
             text = stringResource(id = R.string.feature_login_button),
             onClick = {
-                onFormEvent(SingInFormEvent.Submit)
+                onFormEvent(SignInFormEvent.Submit)
             },
             modifier = Modifier
                 .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
@@ -157,7 +157,7 @@ fun SingInScreen(
 private fun SingInScreenPreview() {
     LinkTalkTheme {
         SingInScreen(
-            formState = SingInFormState(),
+            formState = SignInFormState(),
             onFormEvent = {},
             onRegisterClick = {},
         )

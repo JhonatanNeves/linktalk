@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.linktalk.navigation.extension.slideInTo
 import com.example.linktalk.navigation.extension.slideOutTo
-import com.example.linktalk.ui.feature.singin.SingInRoute
+import com.example.linktalk.ui.feature.signin.SingInRoute
 import com.example.linktalk.ui.feature.splash.SplashRoute
 import kotlinx.serialization.Serializable
 

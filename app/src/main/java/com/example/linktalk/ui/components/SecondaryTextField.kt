@@ -85,7 +85,7 @@ fun SecondaryTextField(
 
             Row (
                 modifier = Modifier
-                    .bottomBorder(Color.Red, 2.dp),
+                    .bottomBorder(MaterialTheme.colorScheme.onSurfaceVariant, 1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
 

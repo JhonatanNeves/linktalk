@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.node.DrawModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Dp
 
 fun Modifier.bottomBorder(color: Color, strokeWidth: Dp) = this.drawBehind {
@@ -26,7 +27,7 @@ fun Modifier.bottomBorder(color: Color, strokeWidth: Dp) = this.drawBehind {
 private class BottonBorderNode(
     var color: Color,
     var strokeWidth: Dp,
-): DrawModifierNode, Modifier.Node(){
+) : DrawModifierNode, Modifier.Node() {
     override fun ContentDrawScope.draw() {
         val strokeWidthPx = strokeWidth.toPx()
 
@@ -45,7 +46,7 @@ private class BottonBorderNode(
 private data class BottomBorderElement(
     val color: Color,
     val strokeWidth: Dp,
-): ModifierNodeElement<BottonBorderNode>(){
+) : ModifierNodeElement<BottonBorderNode>() {
     override fun create(): BottonBorderNode {
         return BottonBorderNode(color, strokeWidth)
     }
@@ -55,5 +56,12 @@ private data class BottomBorderElement(
         node.strokeWidth = strokeWidth
     }
 
+    override fun InspectorInfo.inspectableProperties() {
+        name = "bottomBorder"
+        properties["color"] = color
+        properties["strokeWidth"] = strokeWidth
+    }
 }
-// Criando o modificador personalizado bottomBorder utilizando a API do Modifier.Node
+
+fun Modifier.bottomBorder2(color: Color, strokeWidth: Dp) =
+    this then BottomBorderElement(color, strokeWidth)

@@ -1,4 +1,4 @@
-package com.example.linktalk.ui.feature.singin
+package com.example.linktalk.ui.feature.signin
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,20 +9,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SingInViewModel @Inject constructor() : ViewModel() {
+class SignInViewModel @Inject constructor() : ViewModel() {
 
-    var formState by mutableStateOf(SingInFormState())
+    var formState by mutableStateOf(SignInFormState())
     private set
 
-    fun onFormEvent(event: SingInFormEvent) {
+    fun onFormEvent(event: SignInFormEvent) {
         when (event) {
-            is SingInFormEvent.EmailChanged -> {
+            is SignInFormEvent.EmailChanged -> {
                 formState = formState.copy(email = event.email, emailError = null)
             }
-            is SingInFormEvent.PasswordChanged -> {
+            is SignInFormEvent.PasswordChanged -> {
                 formState = formState.copy(password = event.password, passwordError = null)
             }
-            SingInFormEvent.Submit -> {
+            SignInFormEvent.Submit -> {
                 doSingIn()
             }
         }

@@ -1,8 +1,8 @@
-package com.example.linktalk.ui.feature.singin
+package com.example.linktalk.ui.feature.signin
 
 import androidx.annotation.StringRes
 
-data class SingInFormState(
+data class SignInFormState(
     val email: String = "",
     @StringRes
     val emailError: Int? = null,
