@@ -23,8 +23,8 @@
     <string name="feature_login_register">Sing Up</string>
 
     <string name="feature_sign_up_change_profile_photo">Change profile picture</string>
-    <string name="feature_sign_up_first_name">First name</string>
-    <string name="feature_sign_up_last_name">Last name</string>
+    <string name="feature_sign_up_first_name">First Name</string>
+    <string name="feature_sign_up_last_name">Last Name</string>
     <string name="feature_sign_up_email">E-mail</string>
     <string name="feature_sign_up_password">Password</string>
     <string name="feature_sign_up_password_confirmation">Confirm password</string>

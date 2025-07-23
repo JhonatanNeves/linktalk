@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
@@ -56,6 +57,7 @@ fun PrimaryButton(
             } else {
                 Text(
                     text = text,
+                    fontSize = 16.sp,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center,
