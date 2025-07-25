@@ -4,7 +4,7 @@
     <string name="common_generic_error_title">Something went wrong</string>
     <string name="common_generic_error_message">Please try again or report a problem</string>
     <string name="common_ok">OK</string>
-    <string name="common_add_profile_photo">Add profile picture</string>
+    <string name="common_add_profile_photo">Add photo</string>
     <string name="common_take_photo">Take photo</string>
     <string name="common_upload_photo">Gallery</string>
 
