@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.linktalk.R
 import com.example.linktalk.ui.components.PrimaryButton
 import com.example.linktalk.ui.components.ProfilePictureOptionsModalBottomSheet
@@ -41,13 +42,22 @@ import com.example.linktalk.ui.theme.LinkTalkTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun SignUpRoute() {
-    SignUpScreen()
+fun SignUpRoute(
+    viewModel: SingUpViewModel = viewModel()
+) {
+    val formState = viewModel.formState
+    SignUpScreen(
+        formState = formState,
+        onFormEvent = viewModel::onFormEvent
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    formState: SingUpFormState,
+    onFormEvent: (SingUpFormEvent) -> Unit,
+) {
     Box(
         modifier = Modifier
             .background(brush = BackgroundGradient)
@@ -60,14 +70,6 @@ fun SignUpScreen() {
         ) {
 
             Spacer(modifier = Modifier.height(56.dp))
-
-            var profilePictureSelectedUri by remember {
-                mutableStateOf<Uri?>(null)
-            }
-
-            var openProfilePictureOptionsModalBottomSheet by remember {
-                mutableStateOf(false)
-            }
 
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = null)
 
@@ -89,10 +91,10 @@ fun SignUpScreen() {
                 ) {
 
                     ProfilePictureSelector(
-                        imageUri = profilePictureSelectedUri,
+                        imageUri = formState.profilePictureUri,
                         modifier = Modifier
                             .clickable {
-                                openProfilePictureOptionsModalBottomSheet = true
+                                onFormEvent(SingUpFormEvent.OpenProfilePictureOptionsModalBottomSheet)
                             }
                     )
 
@@ -100,38 +102,38 @@ fun SignUpScreen() {
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_first_name),
-                        value = "",
-                        onValueChange = {}
+                        value = formState.firstName,
+                        onValueChange = {SingUpFormEvent.FirstNameChanged(it)}
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_last_name),
-                        value = "",
-                        onValueChange = {}
+                        value = formState.lastName,
+                        onValueChange = {onFormEvent(SingUpFormEvent.LastNameChanged(it))}
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_email),
-                        value = "",
-                        onValueChange = {},
+                        value = formState.email,
+                        onValueChange = {onFormEvent(SingUpFormEvent.EmailChanged(it))},
                         keyboardType = KeyboardType.Email
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password),
-                        value = "",
-                        onValueChange = {},
+                        value = formState.password,
+                        onValueChange = {onFormEvent(SingUpFormEvent.PasswordChanged(it))},
                         keyboardType = KeyboardType.Password
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password_confirmation),
-                        value = "",
-                        onValueChange = {},
+                        value = formState.passwordConfirmation,
+                        onValueChange = {onFormEvent(SingUpFormEvent.PasswordConfirmationChanged(it))},
                         keyboardType = KeyboardType.Password,
                         imeAction = ImeAction.Done
                     )
@@ -139,24 +141,24 @@ fun SignUpScreen() {
 
                     PrimaryButton(
                         text = stringResource(id = R.string.feature_sign_up_button),
-                        onClick = {}
+                        onClick = {onFormEvent(SingUpFormEvent.Submit)}
                     )
                 }
             }
 
             val sheetState = rememberModalBottomSheetState()
             val scope = rememberCoroutineScope()
-            if (openProfilePictureOptionsModalBottomSheet){
+            if (formState.isProfilePictureModalBottomSheetOpen){
                 ProfilePictureOptionsModalBottomSheet(
                     onPictureSelected = {uri ->
-                        profilePictureSelectedUri = uri
+                        onFormEvent(SingUpFormEvent.ProfilePhotoUriChanged(uri))
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                openProfilePictureOptionsModalBottomSheet = false
+                                onFormEvent(SingUpFormEvent.CloseProfilePictureOptionsModalBottomSheet)
                             }
                         }
                     },
-                    onDismissRequest = { openProfilePictureOptionsModalBottomSheet = false },
+                    onDismissRequest = { onFormEvent(SingUpFormEvent.CloseProfilePictureOptionsModalBottomSheet) },
                     sheetState = sheetState,
                 )
             }
@@ -168,6 +170,9 @@ fun SignUpScreen() {
 @Composable
 private fun SignUpScreenPreview() {
     LinkTalkTheme {
-        SignUpScreen()
+        SignUpScreen(
+            formState = SingUpFormState(),
+            onFormEvent = {}
+        )
     }
 }
