@@ -29,7 +29,7 @@
     <string name="feature_sign_up_password">Password</string>
     <string name="feature_sign_up_password_confirmation">Confirm password</string>
     <string name="feature_sign_up_button">Register</string>
-    <string name="feature_sign_up_passwords_match">the passwords are the same</string>
+    <string name="feature_sign_up_passwords_match">The passwords are the same</string>
     <string name="feature_sign_up_has_account">Already have an account?</string>
     <string name="feature_sign_up_login_here">Log in</string>
 

@@ -103,54 +103,64 @@ fun SignUpScreen(
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_first_name),
                         value = formState.firstName,
-                        onValueChange = {SingUpFormEvent.FirstNameChanged(it)}
+                        onValueChange = { SingUpFormEvent.FirstNameChanged(it) }
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_last_name),
                         value = formState.lastName,
-                        onValueChange = {onFormEvent(SingUpFormEvent.LastNameChanged(it))}
+                        onValueChange = { onFormEvent(SingUpFormEvent.LastNameChanged(it)) }
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_email),
                         value = formState.email,
-                        onValueChange = {onFormEvent(SingUpFormEvent.EmailChanged(it))},
+                        onValueChange = { onFormEvent(SingUpFormEvent.EmailChanged(it)) },
                         keyboardType = KeyboardType.Email
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
+                    val extraTextStringResId =
+                        remember(formState.password, formState.passwordConfirmation) {
+                            if (formState.password.isNotEmpty() && formState.password == formState.passwordConfirmation) {
+                                R.string.feature_sign_up_passwords_match
+                            } else null
+                        }
+
+
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password),
                         value = formState.password,
-                        onValueChange = {onFormEvent(SingUpFormEvent.PasswordChanged(it))},
-                        keyboardType = KeyboardType.Password
+                        onValueChange = { onFormEvent(SingUpFormEvent.PasswordChanged(it)) },
+                        keyboardType = KeyboardType.Password,
+                        extraText = extraTextStringResId?.let { stringResource(id = it) },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password_confirmation),
                         value = formState.passwordConfirmation,
-                        onValueChange = {onFormEvent(SingUpFormEvent.PasswordConfirmationChanged(it))},
+                        onValueChange = { onFormEvent(SingUpFormEvent.PasswordConfirmationChanged(it)) },
                         keyboardType = KeyboardType.Password,
+                        extraText = extraTextStringResId?.let { stringResource(id = it) },
                         imeAction = ImeAction.Done
                     )
                     Spacer(modifier = Modifier.height(36.dp))
 
                     PrimaryButton(
                         text = stringResource(id = R.string.feature_sign_up_button),
-                        onClick = {onFormEvent(SingUpFormEvent.Submit)}
+                        onClick = { onFormEvent(SingUpFormEvent.Submit) }
                     )
                 }
             }
 
             val sheetState = rememberModalBottomSheetState()
             val scope = rememberCoroutineScope()
-            if (formState.isProfilePictureModalBottomSheetOpen){
+            if (formState.isProfilePictureModalBottomSheetOpen) {
                 ProfilePictureOptionsModalBottomSheet(
-                    onPictureSelected = {uri ->
+                    onPictureSelected = { uri ->
                         onFormEvent(SingUpFormEvent.ProfilePhotoUriChanged(uri))
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
