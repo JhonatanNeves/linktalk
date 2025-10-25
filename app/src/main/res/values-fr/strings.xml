@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Link Talk</string>
+
+    <string name="common_generic_error_title">Quelque chose s\'est mal passé</string>
+    <string name="common_generic_error_message">Veuillez réessayer ou signaler un problème</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add_profile_photo">Ajouter une photo</string>
+    <string name="common_take_photo">Prendre une photo</string>
+    <string name="common_upload_photo">Galerie</string>
+
+    <string name="error_message_invalid_username_or_password">E-mail ou mot de passe incorrect</string>
+    <string name="error_message_user_with_username_already_exists">L\'utilisateur avec l\'e-mail fourni existe déjà dans le système</string>
+    <string name="error_message_field_blank">%1s est obligatoire</string>
+    <string name="error_message_password_less_than_eight_chars">Le mot de passe doit contenir au moins 8 caractères</string>
+    <string name="error_message_password_invalid">Le mot de passe doit contenir au moins une lettre et un chiffre</string>
+    <string name="error_message_password_confirmation_invalid">La confirmation du mot de passe ne correspond pas</string>
+    <string name="error_message_email_invalid">E-mail invalide</string>
+
+    <string name="feature_login_email">E-mail</string>
+    <string name="feature_login_password">Mot de passe</string>
+    <string name="feature_login_button">Se connecter</string>
+    <string name="feature_login_no_account">Vous n\'avez pas de compte ?</string>
+    <string name="feature_login_register">Chantez</string>
+
+    <string name="feature_sign_up_change_profile_photo">Changer la photo de profil</string>
+    <string name="feature_sign_up_first_name">Prénom</string>
+    <string name="feature_sign_up_last_name">Nom de famille</string>
+    <string name="feature_sign_up_email">E-mail</string>
+    <string name="feature_sign_up_password">Mot de passe</string>
+    <string name="feature_sign_up_password_confirmation">Confirmez le mot de passe</string>
+    <string name="feature_sign_up_button">Registre</string>
+    <string name="feature_sign_up_passwords_match">Les mots de passe sont les mêmes</string>
+    <string name="feature_sign_up_has_account">Vous avez déjà un compte ?</string>
+    <string name="feature_sign_up_login_here">Se connecter</string>
+
+    <string name="splash_safety_info">Messagerie sécurisée, cryptée et privée</string>
+
+</resources>
