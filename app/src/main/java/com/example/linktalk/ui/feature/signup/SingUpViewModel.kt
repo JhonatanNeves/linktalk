@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.linktalk.R
 
 class SingUpViewModel : ViewModel() {
 
@@ -26,9 +27,11 @@ class SingUpViewModel : ViewModel() {
             }
             is SingUpFormEvent.PasswordChanged -> {
                 formState = formState.copy(password = event.password)
+                updatePasswordExtraText()
             }
             is SingUpFormEvent.PasswordConfirmationChanged -> {
                 formState = formState.copy(passwordConfirmation = event.passwordConfirmation)
+                updatePasswordExtraText()
             }
             SingUpFormEvent.OpenProfilePictureOptionsModalBottomSheet -> {
                 formState = formState.copy(isProfilePictureModalBottomSheetOpen = true)
@@ -40,6 +43,16 @@ class SingUpViewModel : ViewModel() {
 
             }
         }
+    }
+
+    private fun updatePasswordExtraText(){
+        formState = formState.copy(
+            passwordExtraText = if (formState.password.isNotEmpty()
+                && formState.password == formState.passwordConfirmation
+                ){
+                R.string.feature_sign_up_passwords_match
+            } else null
+        )
     }
 
     private fun isValidForm(): Boolean {

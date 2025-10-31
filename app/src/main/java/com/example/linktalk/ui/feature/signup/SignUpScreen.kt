@@ -1,6 +1,5 @@
 package com.example.linktalk.ui.feature.signup
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,11 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -122,20 +117,12 @@ fun SignUpScreen(
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
-                    val extraTextStringResId =
-                        remember(formState.password, formState.passwordConfirmation) {
-                            if (formState.password.isNotEmpty() && formState.password == formState.passwordConfirmation) {
-                                R.string.feature_sign_up_passwords_match
-                            } else null
-                        }
-
-
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password),
                         value = formState.password,
                         onValueChange = { onFormEvent(SingUpFormEvent.PasswordChanged(it)) },
                         keyboardType = KeyboardType.Password,
-                        extraText = extraTextStringResId?.let { stringResource(id = it) },
+                        extraText = formState.passwordExtraText?.let { stringResource(id = it) },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
@@ -144,7 +131,7 @@ fun SignUpScreen(
                         value = formState.passwordConfirmation,
                         onValueChange = { onFormEvent(SingUpFormEvent.PasswordConfirmationChanged(it)) },
                         keyboardType = KeyboardType.Password,
-                        extraText = extraTextStringResId?.let { stringResource(id = it) },
+                        extraText = formState.passwordExtraText?.let { stringResource(id = it) },
                         imeAction = ImeAction.Done
                     )
                     Spacer(modifier = Modifier.height(36.dp))
