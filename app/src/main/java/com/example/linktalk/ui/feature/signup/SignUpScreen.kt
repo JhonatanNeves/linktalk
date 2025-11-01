@@ -105,8 +105,7 @@ fun SignUpScreen(
                             stringResource(
                                 id = it,
                                 stringResource(id = R.string.feature_sign_up_first_name)
-                            )
-                                                                  },
+                            ) },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
