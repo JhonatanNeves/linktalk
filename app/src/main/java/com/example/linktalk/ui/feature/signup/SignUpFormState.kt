@@ -3,7 +3,7 @@ package com.example.linktalk.ui.feature.signup
 import android.net.Uri
 import androidx.annotation.StringRes
 
-data class SingUpFormState(
+data class SignUpFormState(
     val profilePictureUri: Uri? = null,
     val firstName: String = "",
     @StringRes
@@ -19,7 +19,10 @@ data class SingUpFormState(
     val passwordError: Int? = null,
     val passwordConfirmation: String = "",
     @StringRes
+    val passwordConfirmationError: Int? = null,
+    @StringRes
     val passwordExtraText: Int? = null,
     val isProfilePictureModalBottomSheetOpen: Boolean = false,
+    val hasError: Boolean = false,
     val isLoading: Boolean = false,
     )

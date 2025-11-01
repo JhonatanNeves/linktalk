@@ -38,7 +38,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpRoute(
-    viewModel: SingUpViewModel = viewModel()
+    viewModel: SignUpViewModel = viewModel{
+        SignUpViewModel(SignUpFormValidator())
+    }
 ) {
     val formState = viewModel.formState
     SignUpScreen(
@@ -50,8 +52,8 @@ fun SignUpRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
-    formState: SingUpFormState,
-    onFormEvent: (SingUpFormEvent) -> Unit,
+    formState: SignUpFormState,
+    onFormEvent: (SignUpFormEvent) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -89,7 +91,7 @@ fun SignUpScreen(
                         imageUri = formState.profilePictureUri,
                         modifier = Modifier
                             .clickable {
-                                onFormEvent(SingUpFormEvent.OpenProfilePictureOptionsModalBottomSheet)
+                                onFormEvent(SignUpFormEvent.OpenProfilePictureOptionsModalBottomSheet)
                             }
                     )
 
@@ -98,47 +100,61 @@ fun SignUpScreen(
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_first_name),
                         value = formState.firstName,
-                        onValueChange = { SingUpFormEvent.FirstNameChanged(it) }
+                        onValueChange = { SignUpFormEvent.FirstNameChanged(it) },
+                        errorText = formState.firstNameError?.let {
+                            stringResource(
+                                id = it,
+                                stringResource(id = R.string.feature_sign_up_first_name)
+                            )
+                                                                  },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_last_name),
                         value = formState.lastName,
-                        onValueChange = { onFormEvent(SingUpFormEvent.LastNameChanged(it)) }
+                        onValueChange = { onFormEvent(SignUpFormEvent.LastNameChanged(it)) },
+                        errorText = formState.lastNameError?.let {
+                            stringResource(
+                                id = it,
+                                stringResource(id = R.string.feature_sign_up_last_name)
+                            ) },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_email),
                         value = formState.email,
-                        onValueChange = { onFormEvent(SingUpFormEvent.EmailChanged(it)) },
-                        keyboardType = KeyboardType.Email
+                        onValueChange = { onFormEvent(SignUpFormEvent.EmailChanged(it)) },
+                        keyboardType = KeyboardType.Email,
+                        errorText = formState.emailError?.let { stringResource(id = it) },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password),
                         value = formState.password,
-                        onValueChange = { onFormEvent(SingUpFormEvent.PasswordChanged(it)) },
+                        onValueChange = { onFormEvent(SignUpFormEvent.PasswordChanged(it)) },
                         keyboardType = KeyboardType.Password,
                         extraText = formState.passwordExtraText?.let { stringResource(id = it) },
+                        errorText = formState.passwordError?.let { stringResource(id = it) },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_password_confirmation),
                         value = formState.passwordConfirmation,
-                        onValueChange = { onFormEvent(SingUpFormEvent.PasswordConfirmationChanged(it)) },
+                        onValueChange = { onFormEvent(SignUpFormEvent.PasswordConfirmationChanged(it)) },
                         keyboardType = KeyboardType.Password,
                         extraText = formState.passwordExtraText?.let { stringResource(id = it) },
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
+                        errorText = formState.passwordConfirmationError?.let { stringResource(id = it) },
                     )
                     Spacer(modifier = Modifier.height(36.dp))
 
                     PrimaryButton(
                         text = stringResource(id = R.string.feature_sign_up_button),
-                        onClick = { onFormEvent(SingUpFormEvent.Submit) }
+                        onClick = { onFormEvent(SignUpFormEvent.Submit) }
                     )
                 }
             }
@@ -148,14 +164,14 @@ fun SignUpScreen(
             if (formState.isProfilePictureModalBottomSheetOpen) {
                 ProfilePictureOptionsModalBottomSheet(
                     onPictureSelected = { uri ->
-                        onFormEvent(SingUpFormEvent.ProfilePhotoUriChanged(uri))
+                        onFormEvent(SignUpFormEvent.ProfilePhotoUriChanged(uri))
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                onFormEvent(SingUpFormEvent.CloseProfilePictureOptionsModalBottomSheet)
+                                onFormEvent(SignUpFormEvent.CloseProfilePictureOptionsModalBottomSheet)
                             }
                         }
                     },
-                    onDismissRequest = { onFormEvent(SingUpFormEvent.CloseProfilePictureOptionsModalBottomSheet) },
+                    onDismissRequest = { onFormEvent(SignUpFormEvent.CloseProfilePictureOptionsModalBottomSheet) },
                     sheetState = sheetState,
                 )
             }
@@ -169,7 +185,7 @@ fun SignUpScreen(
 private fun SignUpScreenPreview() {
     LinkTalkTheme {
         SignUpScreen(
-            formState = SingUpFormState(),
+            formState = SignUpFormState(),
             onFormEvent = {}
         )
     }

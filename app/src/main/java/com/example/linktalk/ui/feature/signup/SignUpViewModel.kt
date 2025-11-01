@@ -5,42 +5,45 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.linktalk.R
+import com.example.linktalk.ui.validator.FormValidator
 
-class SingUpViewModel : ViewModel() {
+class SignUpViewModel(
+    private val formValidator: FormValidator<SignUpFormState>
+) : ViewModel() {
 
-    var formState by mutableStateOf(SingUpFormState())
+    var formState by mutableStateOf(SignUpFormState())
         private set
 
-    fun onFormEvent(event: SingUpFormEvent) {
+    fun onFormEvent(event: SignUpFormEvent) {
         when (event) {
-            is SingUpFormEvent.ProfilePhotoUriChanged -> {
+            is SignUpFormEvent.ProfilePhotoUriChanged -> {
                 formState = formState.copy(profilePictureUri = event.uri)
             }
-            is SingUpFormEvent.FirstNameChanged -> {
+            is SignUpFormEvent.FirstNameChanged -> {
                 formState = formState.copy(firstName = event.firstName)
             }
-            is SingUpFormEvent.LastNameChanged -> {
+            is SignUpFormEvent.LastNameChanged -> {
                 formState = formState.copy(lastName = event.lastName)
             }
-            is SingUpFormEvent.EmailChanged -> {
+            is SignUpFormEvent.EmailChanged -> {
                 formState = formState.copy(email = event.email)
             }
-            is SingUpFormEvent.PasswordChanged -> {
+            is SignUpFormEvent.PasswordChanged -> {
                 formState = formState.copy(password = event.password)
                 updatePasswordExtraText()
             }
-            is SingUpFormEvent.PasswordConfirmationChanged -> {
+            is SignUpFormEvent.PasswordConfirmationChanged -> {
                 formState = formState.copy(passwordConfirmation = event.passwordConfirmation)
                 updatePasswordExtraText()
             }
-            SingUpFormEvent.OpenProfilePictureOptionsModalBottomSheet -> {
+            SignUpFormEvent.OpenProfilePictureOptionsModalBottomSheet -> {
                 formState = formState.copy(isProfilePictureModalBottomSheetOpen = true)
             }
-            SingUpFormEvent.CloseProfilePictureOptionsModalBottomSheet -> {
+            SignUpFormEvent.CloseProfilePictureOptionsModalBottomSheet -> {
                 formState = formState.copy(isProfilePictureModalBottomSheetOpen = false)
             }
-            SingUpFormEvent.Submit -> {
-
+            SignUpFormEvent.Submit -> {
+                doSingUp()
             }
         }
     }
@@ -55,13 +58,15 @@ class SingUpViewModel : ViewModel() {
         )
     }
 
-    private fun isValidForm(): Boolean {
-        return false
-    }
-
     private fun doSingUp() {
         if (isValidForm()) {
             formState = formState.copy(isLoading = true)
         }
+    }
+
+    private fun isValidForm(): Boolean {
+        return !formValidator.validate(formState).also {
+            formState = it
+        }.hasError
     }
 }
