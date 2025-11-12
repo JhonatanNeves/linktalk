@@ -9,8 +9,8 @@ import javax.inject.Inject
 class SignUpFormValidator @Inject constructor() : FormValidator<SignUpFormState> {
 
     override fun validate(formState: SignUpFormState): SignUpFormState {
-        val isFirstNameValid = formState.firstName.isNotEmpty()
-        val isLastNameValid = formState.lastName.isNotEmpty()
+        val isFirstNameValid = formState.firstName.isNotBlank()
+        val isLastNameValid = formState.lastName.isNotBlank()
         val isEmailValid = EmailValidator.isValid(formState.email)
         val isPasswordValid = PasswordValidator.isValid(formState.password)
         val isPasswordConfirmationValid = PasswordValidator.isValid(formState.passwordConfirmation)
