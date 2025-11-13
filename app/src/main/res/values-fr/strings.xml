@@ -10,6 +10,7 @@
     <string name="common_upload_photo">Galerie</string>
 
     <string name="error_message_invalid_username_or_password">E-mail ou mot de passe incorrect</string>
+    <string name="error_message_api_form_validation_failed">Erreur de validation du formulaire, veuillez vérifier les données et réessayer.</string>
     <string name="error_message_user_with_username_already_exists">L\'utilisateur avec l\'e-mail fourni existe déjà dans le système</string>
     <string name="error_message_field_blank">%1s est obligatoire</string>
     <string name="error_message_password_less_than_eight_chars">Le mot de passe doit contenir au moins 8 caractères</string>

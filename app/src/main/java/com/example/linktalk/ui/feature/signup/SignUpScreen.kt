@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -45,6 +48,32 @@ fun SignUpRoute(
         formState = formState,
         onFormEvent = viewModel::onFormEvent
     )
+
+    formState.apiErrorMessageResId?.let { resId ->
+        AlertDialog(
+            onDismissRequest = viewModel::errorMessageShown,
+            confirmButton = {
+                TextButton(
+                    onClick = viewModel::errorMessageShown,
+                ) {
+                    Text(
+                        text = stringResource(R.string.common_ok)
+                    )
+                }
+            },
+            title = {
+                Text(
+                    text = stringResource(R.string.common_generic_error_title)
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(resId),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,7 +132,8 @@ fun SignUpScreen(
                             stringResource(
                                 id = it,
                                 stringResource(id = R.string.feature_sign_up_first_name)
-                            ) },
+                            )
+                        },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
@@ -115,7 +145,8 @@ fun SignUpScreen(
                             stringResource(
                                 id = it,
                                 stringResource(id = R.string.feature_sign_up_last_name)
-                            ) },
+                            )
+                        },
                     )
                     Spacer(modifier = Modifier.height(22.dp))
 
@@ -151,7 +182,8 @@ fun SignUpScreen(
 
                     PrimaryButton(
                         text = stringResource(id = R.string.feature_sign_up_button),
-                        onClick = { onFormEvent(SignUpFormEvent.Submit) }
+                        onClick = { onFormEvent(SignUpFormEvent.Submit) },
+                        isLoading = formState.isLoading
                     )
                 }
             }
@@ -176,8 +208,8 @@ fun SignUpScreen(
     }
 }
 
-@Preview (showBackground = true, locale = "en")
-@Preview (showBackground = true, locale = "fr")
+@Preview(showBackground = true, locale = "en")
+@Preview(showBackground = true, locale = "fr")
 @Composable
 private fun SignUpScreenPreview() {
     LinkTalkTheme {

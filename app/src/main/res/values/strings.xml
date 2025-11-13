@@ -9,6 +9,7 @@
     <string name="common_upload_photo">Gallery</string>
 
     <string name="error_message_invalid_username_or_password">Incorrect email or password</string>
+    <string name="error_message_api_form_validation_failed">Form validation error, please check the data and try again.</string>
     <string name="error_message_user_with_username_already_exists">User with the provided email already exists in the system</string>
     <string name="error_message_field_blank">%1s is required.</string>
     <string name="error_message_password_less_than_eight_chars">Password must contain at least 8 characters</string>
