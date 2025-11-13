@@ -11,17 +11,16 @@ import javax.inject.Inject
 
 class NetworkDataSourceImpl @Inject constructor(
     private val httpClient: HttpClient
-): NetWorkDataSource {
+) : NetWorkDataSource {
     override suspend fun signUp(request: CreatAccountRequest) {
-        httpClient.post ( "signup" ) {
+        httpClient.post("signup") {
             setBody(request)
         }.body<Unit>()
     }
 
     override suspend fun signIn(request: AuthRequest): TokenResponse {
-        return httpClient.post( "signin" ) {
+        return httpClient.post("signin") {
             setBody(request)
         }.body()
     }
-
 }

@@ -10,6 +10,7 @@ import com.example.linktalk.data.repository.AuthRepository
 import com.example.linktalk.model.CreateAccount
 import com.example.linktalk.ui.validator.FormValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.ktor.client.plugins.ClientRequestException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -78,20 +79,22 @@ class SignUpViewModel @Inject constructor(
         if (isValidForm()) {
             formState = formState.copy(isLoading = true)
             viewModelScope.launch {
-                try {
-
-                    authRepository.signUp(
-                        createAccount = CreateAccount(
-                            username = "",
-                            password = "",
-                            firstName = formState.firstName,
-                            lastName = formState.lastName,
-                            profilePictureId = null,
-                        )
+                authRepository.signUp(
+                    createAccount = CreateAccount(
+                        username = "",
+                        password = "",
+                        firstName = formState.firstName,
+                        lastName = formState.lastName,
+                        profilePictureId = null,
                     )
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                ).fold(
+                    onSuccess = {
+                        formState = formState.copy(isLoading = false)
+                    },
+                    onFailure = {
+                        formState = formState.copy(isLoading = false)
+                    }
+                )
             }
         }
     }
