@@ -1,8 +1,11 @@
 package com.example.linktalk.ui.feature.signup
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.linktalk.R
@@ -10,7 +13,9 @@ import com.example.linktalk.data.repository.AuthRepository
 import com.example.linktalk.model.CreateAccount
 import com.example.linktalk.model.NetWorkException
 import com.example.linktalk.ui.validator.FormValidator
+import com.example.linktalk.util.image.ImageCompressor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.plugins.ClientRequestException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +24,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val formValidator: FormValidator<SignUpFormState>,
     private val authRepository: AuthRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     var formState by mutableStateOf(SignUpFormState())
@@ -28,6 +34,9 @@ class SignUpViewModel @Inject constructor(
         when (event) {
             is SignUpFormEvent.ProfilePhotoUriChanged -> {
                 formState = formState.copy(profilePictureUri = event.uri)
+                event.uri?.let {
+                    compreesImageAndUpdateState(it)
+                }
             }
 
             is SignUpFormEvent.FirstNameChanged -> {
@@ -62,6 +71,20 @@ class SignUpViewModel @Inject constructor(
 
             SignUpFormEvent.Submit -> {
                 doSingUp()
+            }
+        }
+    }
+
+    private fun compreesImageAndUpdateState(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                formState = formState.copy(isCompressingImage = true)
+                val compressedFile = ImageCompressor.compressAndResizeImage(context, uri)
+                formState = formState.copy(profilePictureUri = compressedFile.toUri())
+            } catch (e: Exception) {
+
+            } finally {
+                formState = formState.copy(isCompressingImage = false)
             }
         }
     }
