@@ -34,6 +34,8 @@
     <string name="feature_sign_up_passwords_match">The passwords are the same</string>
     <string name="feature_sign_up_has_account">Already have an account?</string>
     <string name="feature_sign_up_login_here">Log in</string>
+    <string name="feature_sign_up_success">Cadastro realizado com sucesso. Faça login para continuar</string>
+    <string name="error_message_profile_picture_uploading_failed">Error loading profile picture. Please try again. (Supported formats: jpg, jpeg, png)</string>
 
     <string name="splash_safety_info">Secure, encrypted and private messaging</string>
 

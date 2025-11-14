@@ -16,7 +16,6 @@ import com.example.linktalk.ui.validator.FormValidator
 import com.example.linktalk.util.image.ImageCompressor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.ktor.client.plugins.ClientRequestException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +23,7 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val formValidator: FormValidator<SignUpFormState>,
     private val authRepository: AuthRepository,
+    private val imageCompressor: ImageCompressor,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -35,7 +35,7 @@ class SignUpViewModel @Inject constructor(
             is SignUpFormEvent.ProfilePhotoUriChanged -> {
                 formState = formState.copy(profilePictureUri = event.uri)
                 event.uri?.let {
-                    compreesImageAndUpdateState(it)
+                    compressImageAndUpdateState(it)
                 }
             }
 
@@ -75,11 +75,11 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun compreesImageAndUpdateState(uri: Uri) {
+    private fun compressImageAndUpdateState(uri: Uri) {
         viewModelScope.launch {
             try {
                 formState = formState.copy(isCompressingImage = true)
-                val compressedFile = ImageCompressor.compressAndResizeImage(context, uri)
+                val compressedFile = imageCompressor.compressAndResizeImage(uri)
                 formState = formState.copy(profilePictureUri = compressedFile.toUri())
             } catch (e: Exception) {
 
@@ -103,13 +103,39 @@ class SignUpViewModel @Inject constructor(
         if (isValidForm()) {
             formState = formState.copy(isLoading = true)
             viewModelScope.launch {
+                var profilePictureId: Int? = null
+                var errorWhenUploadingProfilePicture = false
+
+                formState.profilePictureUri?.path?.let { path ->
+                    authRepository.uploadProfilePicture(path).fold(
+                        onSuccess = { image ->
+                            profilePictureId = image.id
+                        },
+                        onFailure = {
+                            formState = formState.copy(
+                                isLoading = false,
+                                profilePictureUri = null,
+                                apiErrorMessageResId = R.string.error_message_profile_picture_uploading_failed
+                            )
+                            errorWhenUploadingProfilePicture = true
+                        }
+                    )
+                }
+
+//                if (!errorWhenUploadingProfilePicture) {  review code
+//                    return@launch
+//                }
+                if (errorWhenUploadingProfilePicture) {
+                    return@launch
+                }
+
                 authRepository.signUp(
                     createAccount = CreateAccount(
-                        username = "",
-                        password = "",
+                        username = formState.email,
+                        password = formState.password,
                         firstName = formState.firstName,
                         lastName = formState.lastName,
-                        profilePictureId = null,
+                        profilePictureId = profilePictureId,
                     )
                 ).fold(
                     onSuccess = {
@@ -125,9 +151,9 @@ class SignUpViewModel @Inject constructor(
                                 when (it.statusCode) {
                                     400 -> R.string.error_message_api_form_validation_failed
                                     409 -> R.string.error_message_user_with_username_already_exists
-                                    else -> R.string.common_generic_error_title
+                                    else -> R.string.common_generic_error_message
                                 }
-                            } else R.string.common_generic_error_title
+                            } else R.string.common_generic_error_message
                         )
                     }
                 )
@@ -141,7 +167,11 @@ class SignUpViewModel @Inject constructor(
         }.hasError
     }
 
-    fun errorMessageShown(){
+    fun successMessageShown() {
+        formState = formState.copy(isSignedUp = false)
+    }
+
+    fun errorMessageShown() {
         formState = formState.copy(apiErrorMessageResId = null)
     }
 }

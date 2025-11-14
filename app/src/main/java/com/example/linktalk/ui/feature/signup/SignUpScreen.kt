@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.linktalk.R
+import com.example.linktalk.ui.components.AppDialog
 import com.example.linktalk.ui.components.PrimaryButton
 import com.example.linktalk.ui.components.ProfilePictureOptionsModalBottomSheet
 import com.example.linktalk.ui.components.ProfilePictureSelector
@@ -41,37 +42,36 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpRoute(
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel(),
+    onSignUpSuccess: () -> Unit,
 ) {
     val formState = viewModel.formState
     SignUpScreen(
         formState = formState,
         onFormEvent = viewModel::onFormEvent
     )
+// tratar essa condição encerrando a stack para nao cair em loop, resetar o estado p/ navegar para outra tela
+    if (formState.isSignedUp) {
+        AppDialog(
+            onDismissRequest = {
+                viewModel.successMessageShown()
+                onSignUpSuccess()
+            },
+            onConfirmButtonClick = {
+                viewModel.successMessageShown()
+                onSignUpSuccess()
+
+            },
+            message = stringResource(R.string.feature_sign_up_success),
+        )
+    }
 
     formState.apiErrorMessageResId?.let { resId ->
-        AlertDialog(
+        AppDialog(
             onDismissRequest = viewModel::errorMessageShown,
-            confirmButton = {
-                TextButton(
-                    onClick = viewModel::errorMessageShown,
-                ) {
-                    Text(
-                        text = stringResource(R.string.common_ok)
-                    )
-                }
-            },
-            title = {
-                Text(
-                    text = stringResource(R.string.common_generic_error_title)
-                )
-            },
-            text = {
-                Text(
-                    text = stringResource(resId),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            },
+            onConfirmButtonClick = viewModel::errorMessageShown,
+            message = stringResource(resId),
+            title = stringResource(R.string.common_generic_error_title)
         )
     }
 }

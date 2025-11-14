@@ -5,6 +5,7 @@ import com.example.linktalk.data.network.NetWorkDataSource
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
 import com.example.linktalk.model.CreateAccount
+import com.example.linktalk.model.Image
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -36,5 +37,19 @@ class AuthRepositoryImpl @Inject constructor(
                 password = password,
             )
         )
+    }
+
+    override suspend fun uploadProfilePicture(filePath: String): Result<Image> {
+        return withContext(ioDispatcher) {
+            runCatching {
+                val imageResponse = networkDataSource.upLoadProfilePicture(filePath)
+                Image(
+                    id = imageResponse.id,
+                    name = imageResponse.name,
+                    type = imageResponse.type,
+                    url = imageResponse.url,
+                )
+            }
+        }
     }
 }
