@@ -4,16 +4,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.linktalk.R
+import com.example.linktalk.data.repository.AuthRepository
+import com.example.linktalk.model.NetWorkException
+import com.example.linktalk.ui.validator.FormValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor() : ViewModel() {
+class SignInViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+) : ViewModel() {
 
     var formState by mutableStateOf(SignInFormState())
     private set
 
+    private val _signInActionFlow = MutableSharedFlow<SignInAction>()                   // 3 MutableSharedFlow garante que esse evento/ação só será disparado uma vez
+    val signInActionFlow = _signInActionFlow.asSharedFlow()
     fun onFormEvent(event: SignInFormEvent) {
         when (event) {
             is SignInFormEvent.EmailChanged -> {
@@ -40,13 +51,37 @@ class SignInViewModel @Inject constructor() : ViewModel() {
         }
         if (isFormValid) {
             formState = formState.copy(isLoading = true)
+            viewModelScope.launch {                                   // 2 tratamento de estado
+                authRepository.signIn(
+                    username = formState.email,
+                    password = formState.password,
+                ).fold(
+                    onSuccess = {
+                        formState = formState.copy(isLoading = false)
+                        _signInActionFlow.emit(SignInAction.Success)
+                    },
+                    onFailure = {
+                        formState = formState.copy(isLoading = false)
+
+                        val error = if (it is NetWorkException.ApiException && it.statusCode == 401) {
+                            SignInAction.Error.UnauthorizedError
+                        } else {
+                            SignInAction.Error.GenericError
+                        }
+
+                        _signInActionFlow.emit(error)
+                    }
+
+                )
+            }
         }
     }
 
-//    private fun resetFormErrorState() {
-//        formState = formState.copy(
-//            emailError = null,
-//            passwordError = null,
-//        )
-//    }
+    sealed interface SignInAction {
+        data object Success : SignInAction
+        sealed interface Error : SignInAction {
+            data object GenericError : Error
+            data object UnauthorizedError : Error
+        }
+    }
 }

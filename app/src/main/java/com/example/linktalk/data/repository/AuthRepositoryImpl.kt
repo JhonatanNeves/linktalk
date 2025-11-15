@@ -14,6 +14,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val networkDataSource: NetWorkDataSource,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AuthRepository {
+
     override suspend fun signUp(createAccount: CreateAccount): Result<Unit> {
         return withContext(ioDispatcher) {
             runCatching {
@@ -30,13 +31,17 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signIn(username: String, password: String) {
-        networkDataSource.signIn(
-            request = AuthRequest(
-                username = username,
-                password = password,
-            )
-        )
+    override suspend fun signIn(username: String, password: String): Result<Unit> {
+        return withContext(ioDispatcher) {
+            runCatching {
+                val tokenResponse = networkDataSource.signIn( // 1 armazena o token esperado
+                    request = AuthRequest(
+                        username = username,
+                        password = password,
+                    )
+                )
+            }
+        }
     }
 
     override suspend fun uploadProfilePicture(filePath: String): Result<Image> {
