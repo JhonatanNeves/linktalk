@@ -1,7 +1,9 @@
 package com.example.linktalk.navigation
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -47,9 +49,16 @@ fun ChatNavHost() {
             enterTransition = {this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Left)}
         ){
+            val context = LocalContext.current
             SingInRoute(
                 navigateToSignUp = {
                     navController.navigate(Route.SingUpRoute)
+                },
+                navigateToMain = {
+                    Toast.makeText(context,
+                        "Navigate to main",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             )
         }
