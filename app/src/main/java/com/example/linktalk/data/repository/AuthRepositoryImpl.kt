@@ -1,6 +1,7 @@
 package com.example.linktalk.data.repository
 
 import com.example.linktalk.data.di.IoDispatcher
+import com.example.linktalk.data.manager.TokenManager
 import com.example.linktalk.data.network.NetWorkDataSource
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val networkDataSource: NetWorkDataSource,
+    private val tokenManager: TokenManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AuthRepository {
 
@@ -40,6 +42,8 @@ class AuthRepositoryImpl @Inject constructor(
                         password = password,
                     )
                 )
+
+                tokenManager.saveAccessToken(tokenResponse.token)
             }
         }
     }
