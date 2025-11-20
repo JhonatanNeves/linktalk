@@ -11,6 +11,7 @@ import com.example.linktalk.model.Image
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,9 +23,14 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     //CryptoManager foi criado apenas para validar a arquitetura e as funcionalidades básicas do Jetpack Security com EncryptedSharedPreferences
-    init {
-        GlobalScope.launch(ioDispatcher) {
-            Log.d("AuthRepositoryImpl", "Access Token descriptografado: ${tokenManager.accessToken.first()}")
+
+    override suspend fun getAccessToken(): String? {
+        return tokenManager.accessToken.firstOrNull()
+    }
+
+    override suspend fun clearAccessToken() {
+        withContext(ioDispatcher) {
+            tokenManager.clearAccessToken()
         }
     }
 
@@ -72,4 +78,13 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun authenticate(token: String): Result<Unit> {
+        return withContext(ioDispatcher) {
+            runCatching {
+                val userResponse = networkDataSource.authenticate(token)
+            }
+        }
+    }
+
 }

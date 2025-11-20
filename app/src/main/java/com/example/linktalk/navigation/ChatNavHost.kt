@@ -1,5 +1,7 @@
 package com.example.linktalk.navigation
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
@@ -26,9 +28,11 @@ sealed interface Route {
     object SingUpRoute
 }
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 fun ChatNavHost() {
     val navController = rememberNavController()
+    val activity = LocalContext.current as? Activity
 
     NavHost(navController = navController, startDestination = Route.SplashRoute){
         composable<Route.SplashRoute> {
@@ -42,20 +46,28 @@ fun ChatNavHost() {
                             }
                         }
                     )
-                }
+                },
+                onNavigateToMain = {
+                    Toast.makeText(navController.context,
+                        "Navigate to main",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                onCloseApp = {
+                    activity?.finish()
+                },
             )
         }
         composable<Route.SingInRoute> (
             enterTransition = {this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Right)},
             exitTransition = {this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Left)}
         ){
-            val context = LocalContext.current
             SingInRoute(
                 navigateToSignUp = {
                     navController.navigate(Route.SingUpRoute)
                 },
                 navigateToMain = {
-                    Toast.makeText(context,
+                    Toast.makeText(navController.context,
                         "Navigate to main",
                         Toast.LENGTH_SHORT
                     ).show()
