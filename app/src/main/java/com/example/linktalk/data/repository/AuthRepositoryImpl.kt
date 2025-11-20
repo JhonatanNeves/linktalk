@@ -1,24 +1,22 @@
 package com.example.linktalk.data.repository
 
-import android.util.Log
 import com.example.linktalk.data.di.IoDispatcher
-import com.example.linktalk.data.manager.TokenManager
+import com.example.linktalk.data.manager.selfuser.SelfUserManager
+import com.example.linktalk.data.manager.token.TokenManager
 import com.example.linktalk.data.network.NetWorkDataSource
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
 import com.example.linktalk.model.CreateAccount
 import com.example.linktalk.model.Image
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val networkDataSource: NetWorkDataSource,
     private val tokenManager: TokenManager,
+    private val selfUserManager: SelfUserManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AuthRepository {
 
@@ -83,6 +81,13 @@ class AuthRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher) {
             runCatching {
                 val userResponse = networkDataSource.authenticate(token)
+
+                selfUserManager.saveSelfUserData(
+                    firstName = userResponse.firstName,
+                    lastName = userResponse.lastName,
+                    profilePictureUrl = userResponse.profilePictureUrl ?: "",
+                    userName = userResponse.username,
+                )
             }
         }
     }
