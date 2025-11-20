@@ -11,38 +11,68 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleStartEffect
 import com.example.linktalk.R
+import com.example.linktalk.ui.components.AppDialog
 import com.example.linktalk.ui.theme.BackgroundGradient
 import com.example.linktalk.ui.theme.LinkTalkTheme
-import com.example.linktalk.ui.theme.Turquoise80
-import kotlinx.coroutines.delay
 
 @Composable
 fun SplashRoute(
+    viewModel: SplashViewModel = hiltViewModel(),
     onNavigateToSingIn: () -> Unit,
+    onNavigateToMain: () -> Unit,
+    onCloseApp: () -> Unit,
 ) {
     SplashScreen()
+
+    LifecycleStartEffect(Unit) {
+        viewModel.checkSession()
+        onStopOrDispose {}
+    }
+
     LaunchedEffect(Unit) {
-        delay(2000)
-        onNavigateToSingIn()
+        viewModel.authenticationState.collect { authenticationState ->
+            when (authenticationState) {
+                SplashViewModel.AuthenticationState.UserAuthenticated -> {
+                    onNavigateToMain()
+
+                }
+
+                SplashViewModel.AuthenticationState.UserNotAuthenticated -> {
+                    onNavigateToSingIn()
+                }
+            }
+        }
+    }
+
+    val showErrorDialog = viewModel.showErrorDialogState
+    if (showErrorDialog) {
+        AppDialog(
+            onDismissRequest = {},
+            onConfirmButtonClick = {
+                viewModel.dismissErrorDialog()
+                onCloseApp()
+            },
+            message = stringResource(R.string.error_message_when_opening_app),
+            confirmButtonText = stringResource(R.string.error_confirm_button_close_app),
+        )
     }
 }
 
@@ -53,17 +83,18 @@ fun SplashScreen() {
     val statusBarColor = Color(0xFF165E57)
     SideEffect {
         window.statusBarColor = statusBarColor.toArgb()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false // para texto claro
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            false // para texto claro
     }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(brush = BackgroundGradient)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    ) {
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = null,
