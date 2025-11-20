@@ -1,4 +1,4 @@
-package com.example.linktalk.data.manager
+package com.example.linktalk.data.manager.token
 
 import kotlinx.coroutines.flow.Flow
 

@@ -1,8 +1,9 @@
-package com.example.linktalk.data.manager
+package com.example.linktalk.data.manager.token
 
 import android.content.Context
 import com.example.linktalk.data.datastore.TokensKeys
 import com.example.linktalk.data.di.IoDispatcher
+import com.example.linktalk.data.manager.CryptoManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
