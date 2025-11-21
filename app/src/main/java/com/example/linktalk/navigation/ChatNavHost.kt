@@ -12,21 +12,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.linktalk.navigation.extension.slideInTo
 import com.example.linktalk.navigation.extension.slideOutTo
+import com.example.linktalk.ui.feature.chats.ChatsRoute
+import com.example.linktalk.ui.feature.chats.navigateToChats
 import com.example.linktalk.ui.feature.signin.SingInRoute
 import com.example.linktalk.ui.feature.signup.SignUpRoute
 import com.example.linktalk.ui.feature.splash.SplashRoute
 import kotlinx.serialization.Serializable
-
-sealed interface Route {
-    @Serializable
-    object SplashRoute
-
-    @Serializable
-    object SingInRoute
-
-    @Serializable
-    object SingUpRoute
-}
 
 @SuppressLint("ContextCastToActivity")
 @Composable
@@ -34,7 +25,7 @@ fun ChatNavHost() {
     val navController = rememberNavController()
     val activity = LocalContext.current as? Activity
 
-    NavHost(navController = navController, startDestination = Route.SplashRoute){
+    NavHost(navController = navController, startDestination = Route.SplashRoute) {
         composable<Route.SplashRoute> {
             SplashRoute(
                 onNavigateToSingIn = {
@@ -48,41 +39,51 @@ fun ChatNavHost() {
                     )
                 },
                 onNavigateToMain = {
-                    Toast.makeText(navController.context,
-                        "Navigate to main",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    navController.navigateToChats(
+                        navOptions = navOptions {
+                            popUpTo(Route.SplashRoute) {
+                                inclusive = true
+                            }
+                        }
+                    )
                 },
                 onCloseApp = {
                     activity?.finish()
                 },
             )
         }
-        composable<Route.SingInRoute> (
-            enterTransition = {this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Right)},
-            exitTransition = {this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Left)}
-        ){
+        composable<Route.SingInRoute>(
+            enterTransition = { this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Right) },
+            exitTransition = { this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Left) }
+        ) {
             SingInRoute(
                 navigateToSignUp = {
                     navController.navigate(Route.SingUpRoute)
                 },
                 navigateToMain = {
-                    Toast.makeText(navController.context,
-                        "Navigate to main",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    navController.navigateToChats(
+                        navOptions = navOptions {
+                            popUpTo(Route.SingInRoute) {
+                                inclusive = true
+                            }
+                        }
+                    )
                 }
             )
         }
-        composable<Route.SingUpRoute> (
-            enterTransition = {this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Left)},
-            exitTransition = {this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Right)}
-        ){
+        composable<Route.SingUpRoute>(
+            enterTransition = { this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Left) },
+            exitTransition = { this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Right) }
+        ) {
             SignUpRoute(
                 onSignUpSuccess = {
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable<Route.ChatsRoute> {
+            ChatsRoute()
         }
     }
 }
