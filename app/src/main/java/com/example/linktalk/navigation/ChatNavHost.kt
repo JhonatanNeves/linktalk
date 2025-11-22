@@ -21,8 +21,10 @@ import kotlinx.serialization.Serializable
 
 @SuppressLint("ContextCastToActivity")
 @Composable
-fun ChatNavHost() {
-    val navController = rememberNavController()
+fun ChatNavHost(
+    navigationState: LinkTalkNavigationState
+) {
+    val navController = navigationState.navController
     val activity = LocalContext.current as? Activity
 
     NavHost(navController = navController, startDestination = Route.SplashRoute) {
