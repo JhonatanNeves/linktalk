@@ -3,6 +3,8 @@ package com.example.linktalk.data.network
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
 import com.example.linktalk.data.network.model.ImageResponse
+import com.example.linktalk.data.network.model.PaginatedChatResponse
+import com.example.linktalk.data.network.model.PaginationParams
 import com.example.linktalk.data.network.model.TokenResponse
 import com.example.linktalk.data.network.model.UserResponse
 
@@ -14,4 +16,7 @@ interface NetWorkDataSource {
     suspend fun upLoadProfilePicture(filePath: String): ImageResponse
 
     suspend fun authenticate(token: String): UserResponse
+
+    suspend fun getChats(token: String, paginationParams: PaginationParams): PaginatedChatResponse
+
 }
