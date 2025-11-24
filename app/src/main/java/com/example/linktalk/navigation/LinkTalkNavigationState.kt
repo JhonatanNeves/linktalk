@@ -35,6 +35,8 @@ class LinkTalkNavigationState(
             currentDestination?.hasRoute(topLevelDestination.route) == true
         }
 
+    val topLevelDestination = TopLevelDestination.entries
+
     fun navigationToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         val topLevelNavOptions = navOptions {
             popUpTo(navController.graph.startDestinationId) {
