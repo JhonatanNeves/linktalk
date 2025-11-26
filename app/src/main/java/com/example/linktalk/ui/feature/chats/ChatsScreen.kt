@@ -2,6 +2,7 @@ package com.example.linktalk.ui.feature.chats
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.linktalk.R
 import com.example.linktalk.model.Chat
+import com.example.linktalk.model.fake.chat1
+import com.example.linktalk.model.fake.chat2
+import com.example.linktalk.model.fake.chat3
 import com.example.linktalk.ui.components.ChatItem
+import com.example.linktalk.ui.components.ChatItemShimmer
 import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
@@ -93,7 +98,20 @@ fun ChatsScreen(
         ) {
             when (chatsListUiState) {
                 ChatsViewModel.ChatsListUiState.Loading -> {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        repeat(7) { index ->
+                            ChatItemShimmer()
 
+                            if (index < 6 ) {
+                                HorizontalDivider(
+                                    color = Grey1
+                                )
+                            }
+                        }
+                    }
                 }
 
                 is ChatsViewModel.ChatsListUiState.Success -> {
@@ -113,7 +131,7 @@ fun ChatsListContent(chats: List<Chat>) {
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         itemsIndexed(chats) { index, chat ->
-            ChatItem()
+            ChatItem(chat)
 
             if (index < chats.lastIndex) {
                 HorizontalDivider(
@@ -140,7 +158,11 @@ private fun ChatsScreenSuccessPreview() {
     LinkTalkTheme {
         ChatsScreen(
             chatsListUiState = ChatsViewModel.ChatsListUiState.Success(
-                chats = emptyList(),
+                chats = listOf(
+                    chat1,
+                    chat2,
+                    chat3
+                ),
             ),
         )
     }
