@@ -1,10 +1,13 @@
 package com.example.linktalk.ui.feature.chats
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -14,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -21,26 +25,42 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.linktalk.R
+import com.example.linktalk.model.Chat
 import com.example.linktalk.ui.components.ChatItem
 import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
-fun ChatsRoute() {
-    ChatsScreen()
+fun ChatsRoute(
+    viewModel: ChatsViewModel = hiltViewModel()
+) {
+    val chatsListUiState by viewModel.chatsListUiState.collectAsStateWithLifecycle()
+
+    ChatsScreen(
+        chatsListUiState = chatsListUiState,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun ChatsScreen() {
+fun ChatsScreen(
+    chatsListUiState: ChatsViewModel.ChatsListUiState
+) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = AnnotatedString.fromHtml(stringResource(R.string.feature_chats_greeting, "Jhonatan")),
+                        text = AnnotatedString.fromHtml(
+                            stringResource(
+                                R.string.feature_chats_greeting,
+                                "Jhonatan"
+                            )
+                        ),
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.titleLarge,
                     )
@@ -53,7 +73,7 @@ fun ChatsScreen() {
         },
         containerColor = MaterialTheme.colorScheme.primary
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .padding(paddingValues)
                 .background(
@@ -70,10 +90,32 @@ fun ChatsScreen() {
                     )
                 )
                 .fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(100) {
-                ChatItem()
+            when (chatsListUiState) {
+                ChatsViewModel.ChatsListUiState.Loading -> {
+
+                }
+
+                is ChatsViewModel.ChatsListUiState.Success -> {
+                    ChatsListContent(chatsListUiState.chats)
+                }
+
+                ChatsViewModel.ChatsListUiState.Error -> {
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ChatsListContent(chats: List<Chat>) {
+    LazyColumn(
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        itemsIndexed(chats) { index, chat ->
+            ChatItem()
+
+            if (index < chats.lastIndex) {
                 HorizontalDivider(
                     color = Grey1
                 )
@@ -84,8 +126,32 @@ fun ChatsScreen() {
 
 @Preview
 @Composable
-private fun ChatsScreenPreview() {
+private fun ChatsScreenLoadingPreview() {
     LinkTalkTheme {
-        ChatsScreen()
+        ChatsScreen(
+            chatsListUiState = ChatsViewModel.ChatsListUiState.Loading,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ChatsScreenSuccessPreview() {
+    LinkTalkTheme {
+        ChatsScreen(
+            chatsListUiState = ChatsViewModel.ChatsListUiState.Success(
+                chats = emptyList(),
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ChatsScreenErrorPreview() {
+    LinkTalkTheme {
+        ChatsScreen(
+            chatsListUiState = ChatsViewModel.ChatsListUiState.Error,
+        )
     }
 }
