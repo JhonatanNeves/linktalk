@@ -34,6 +34,7 @@ import com.example.linktalk.model.fake.chat1
 import com.example.linktalk.model.fake.chat2
 import com.example.linktalk.model.fake.chat3
 import com.example.linktalk.ui.components.ChatItem
+import com.example.linktalk.ui.components.ChatItemError
 import com.example.linktalk.ui.components.ChatItemShimmer
 import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
@@ -46,6 +47,9 @@ fun ChatsRoute(
 
     ChatsScreen(
         chatsListUiState = chatsListUiState,
+        onTryAgainClick = {
+            viewModel.getChats()
+        }
     )
 }
 
@@ -53,7 +57,8 @@ fun ChatsRoute(
 
 @Composable
 fun ChatsScreen(
-    chatsListUiState: ChatsViewModel.ChatsListUiState
+    chatsListUiState: ChatsViewModel.ChatsListUiState,
+    onTryAgainClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -119,6 +124,9 @@ fun ChatsScreen(
                 }
 
                 ChatsViewModel.ChatsListUiState.Error -> {
+                    ChatItemError(
+                        onTryAgainClick = onTryAgainClick
+                    )
                 }
             }
         }
@@ -142,17 +150,20 @@ fun ChatsListContent(chats: List<Chat>) {
     }
 }
 
-@Preview
+@Preview(showBackground = true, locale = "en")
+@Preview(showBackground = true, locale = "fr")
 @Composable
 private fun ChatsScreenLoadingPreview() {
     LinkTalkTheme {
         ChatsScreen(
             chatsListUiState = ChatsViewModel.ChatsListUiState.Loading,
+            onTryAgainClick = {}
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true, locale = "en")
+@Preview(showBackground = true, locale = "fr")
 @Composable
 private fun ChatsScreenSuccessPreview() {
     LinkTalkTheme {
@@ -164,16 +175,19 @@ private fun ChatsScreenSuccessPreview() {
                     chat3
                 ),
             ),
+            onTryAgainClick = {}
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true, locale = "en")
+@Preview(showBackground = true, locale = "fr")
 @Composable
 private fun ChatsScreenErrorPreview() {
     LinkTalkTheme {
         ChatsScreen(
             chatsListUiState = ChatsViewModel.ChatsListUiState.Error,
+            onTryAgainClick = {}
         )
     }
 }

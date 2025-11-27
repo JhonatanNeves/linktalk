@@ -4,6 +4,7 @@
     <string name="common_generic_error_title">Something went wrong</string>
     <string name="common_generic_error_message">Please try again or report a problem</string>
     <string name="common_ok">OK</string>
+    <string name="common_try_again">Try again</string>
     <string name="common_add_profile_photo">Add photo</string>
     <string name="common_take_photo">Take photo</string>
     <string name="common_upload_photo">Gallery</string>
@@ -45,6 +46,5 @@
     <string name="splash_safety_info">Secure, encrypted and private messaging</string>
     <string name="error_message_when_opening_app">An unexpected error occurred while opening the application.\n\nPlease try again later.</string>
     <string name="error_confirm_button_close_app">Close Application.</string>
-
 
 </resources>
