@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +32,11 @@ import com.example.linktalk.model.Chat
 import com.example.linktalk.model.fake.chat1
 import com.example.linktalk.model.fake.chat2
 import com.example.linktalk.model.fake.chat3
+import com.example.linktalk.ui.components.AnimatedContent
 import com.example.linktalk.ui.components.ChatItem
-import com.example.linktalk.ui.components.ChatItemError
+import com.example.linktalk.ui.components.GeneralError
 import com.example.linktalk.ui.components.ChatItemShimmer
+import com.example.linktalk.ui.components.PrimaryButton
 import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
@@ -124,8 +125,19 @@ fun ChatsScreen(
                 }
 
                 ChatsViewModel.ChatsListUiState.Error -> {
-                    ChatItemError(
-                        onTryAgainClick = onTryAgainClick
+                    GeneralError(
+                        title = stringResource(R.string.common_generic_error_title),
+                        message = stringResource(R.string.common_generic_error_message),
+                        resource = {
+                            AnimatedContent()
+                        },
+                        action = {
+                            PrimaryButton(
+                                text = stringResource(R.string.common_try_again),
+                                onClick = onTryAgainClick
+                            )
+                        }
+
                     )
                 }
             }
