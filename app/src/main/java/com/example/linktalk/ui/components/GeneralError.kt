@@ -1,19 +1,20 @@
 package com.example.linktalk.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,9 +22,12 @@ import com.example.linktalk.R
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
-fun ChatItemError(
-    onTryAgainClick: () -> Unit,
-    modifier: Modifier = Modifier
+fun GeneralError(
+    title: String,
+    message: String,
+    modifier: Modifier = Modifier,
+    resource: (@Composable () -> Unit)? = null,
+    action: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -32,42 +36,53 @@ fun ChatItemError(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        AnimatedContent(
-            modifier = Modifier
-                .size(400.dp)
-        )
+        resource?.let {
+            Box(
+                modifier = Modifier
+                    .sizeIn(
+                        maxWidth = 400.dp,
+                        maxHeight = 400.dp,
+                    )
+            ) {
+                it()
+            }
+            Spacer(Modifier.height(32.dp))
+        }
 
         Text(
-            text = stringResource(R.string.common_generic_error_title),
+            text = title,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.titleLarge
         )
 
         Text(
-            text = stringResource(R.string.common_generic_error_message),
+            text = message,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )
 
-        Spacer(Modifier.height(32.dp))
-
-        PrimaryButton(
-            modifier = Modifier
-                .padding(16.dp),
-            text = stringResource(R.string.common_try_again),
-            onClick = onTryAgainClick
-        )
+        action?.let {
+            Spacer(Modifier.height(32.dp))
+            it()
+        }
     }
 }
 
 @Preview
 @Composable
-private fun ChatItemErrorPreview() {
+private fun GeneralErrorPreview() {
     LinkTalkTheme {
-        ChatItemError(
-            onTryAgainClick = {},
+        GeneralError(
+            title = "Ops!",
+            message = "Something went wrong",
+            resource = {
+                Image(
+                    painter = painterResource(id = R.drawable.no_profile_image),
+                    contentDescription = null,
+                )
+            }
         )
     }
 }
