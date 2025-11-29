@@ -36,6 +36,7 @@ import com.example.linktalk.ui.components.AnimatedContent
 import com.example.linktalk.ui.components.ChatItem
 import com.example.linktalk.ui.components.GeneralError
 import com.example.linktalk.ui.components.ChatItemShimmer
+import com.example.linktalk.ui.components.GeneralEmptyList
 import com.example.linktalk.ui.components.PrimaryButton
 import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
@@ -111,7 +112,7 @@ fun ChatsScreen(
                         repeat(7) { index ->
                             ChatItemShimmer()
 
-                            if (index < 6 ) {
+                            if (index < 6) {
                                 HorizontalDivider(
                                     color = Grey1
                                 )
@@ -121,6 +122,24 @@ fun ChatsScreen(
                 }
 
                 is ChatsViewModel.ChatsListUiState.Success -> {
+                    when (chatsListUiState.chats.isNotEmpty()) {
+                        true -> {
+                            ChatsListContent(chatsListUiState.chats)
+                        }
+
+                        false -> {
+                            GeneralEmptyList(
+                                message = stringResource(R.string.feature_chats_empty_list),
+                                resource = {
+                                    AnimatedContent(
+                                        resId = R.raw.animation_empty_list
+                                    )
+                                }
+
+                            )
+                        }
+
+                    }
                     ChatsListContent(chatsListUiState.chats)
                 }
 
@@ -188,6 +207,19 @@ private fun ChatsScreenSuccessPreview() {
                 ),
             ),
             onTryAgainClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ChatsScreenSuccessEmptyPreview() {
+    LinkTalkTheme {
+        ChatsScreen(
+            chatsListUiState = ChatsViewModel.ChatsListUiState.Success(
+                chats = emptyList(),
+            ),
+            onTryAgainClick = {},
         )
     }
 }
