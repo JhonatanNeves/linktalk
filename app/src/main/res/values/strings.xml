@@ -37,9 +37,10 @@
     <string name="feature_sign_up_login_here">Log in</string>
     <string name="feature_sign_up_success">Cadastro realizado com sucesso. Faça login para continuar</string>
 
-    <string name="feature_chats_greeting"><![CDATA[Hello, <b>%1$s</b>]]></string>
     <string name="bottom_navigation_item_chats">Chats</string>
     <string name="bottom_navigation_item_profile">Profile</string>
+    <string name="feature_chats_greeting"><![CDATA[Hello, <b>%1$s</b>]]></string>
+    <string name="feature_chats_empty_list">Empty conversation list.\nStart a new conversation by clicking the + button below.</string>
 
     <string name="error_message_profile_picture_uploading_failed">Error loading profile picture. Please try again. (Supported formats: jpg, jpeg, png)</string>
 
