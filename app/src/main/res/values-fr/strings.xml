@@ -41,7 +41,7 @@
     <string name="bottom_navigation_item_chats">Discussions</string>
     <string name="bottom_navigation_item_profile">Profil</string>
     <string name="feature_chats_greeting"><![CDATA[Bonjour, <b>%1$s</b>]]></string>
-    <string name="feature_chats_empty_list">Liste de conversations vide.\nDémarrez une nouvelle conversation en cliquant sur le bouton + ci-dessous.</string>
+    <string name="feature_chats_empty_list">Liste de conversations vide.\nDémarrez une nouvelle conversation en\ncliquant sur le bouton + ci-dessous.</string>
 
     <string name="error_message_profile_picture_uploading_failed">Erreur lors du chargement de la photo de profil. Veuillez réessayer. (Formats pris en charge : jpg, jpeg, png)</string>
     <string name="error_message_when_opening_app">Une erreur inattendue s\'est produite lors de l\'ouverture de l\'application.\n\nVeuillez réessayer plus tard.</string>

@@ -211,7 +211,8 @@ private fun ChatsScreenSuccessPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true, locale = "en")
+@Preview(showBackground = true, locale = "fr")
 @Composable
 private fun ChatsScreenSuccessEmptyPreview() {
     LinkTalkTheme {
