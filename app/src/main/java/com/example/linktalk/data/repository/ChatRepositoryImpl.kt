@@ -21,9 +21,7 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun getChats(offset: Int, limit: Int): Result<List<Chat>> {
         return withContext(ioDispatcher) {
             runCatching {
-                val token = tokenManager.accessToken.firstOrNull() ?: ""
                 val paginatedChatResponse = networkDataSource.getChats(
-                    token = token,
                     paginationParams = PaginationParams(
                         offset = offset.toString(),
                         limit = limit.toString()

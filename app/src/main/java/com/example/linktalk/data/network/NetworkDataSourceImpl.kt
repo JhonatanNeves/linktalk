@@ -9,6 +9,9 @@ import com.example.linktalk.data.network.model.TokenResponse
 import com.example.linktalk.data.network.model.UserResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
+import io.ktor.client.plugins.plugin
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
@@ -32,7 +35,7 @@ class NetworkDataSourceImpl @Inject constructor(
     override suspend fun signIn(request: AuthRequest): TokenResponse {
         return httpClient.post("signin") {
             setBody(request)
-        }.body()
+        }.body<TokenResponse>()
     }
 
     override suspend fun upLoadProfilePicture(filePath: String): ImageResponse {
@@ -49,18 +52,14 @@ class NetworkDataSourceImpl @Inject constructor(
         ).body()
     }
 
-    override suspend fun authenticate(token: String): UserResponse {
-        return httpClient.get("authenticate"){
-            header(HttpHeaders.Authorization, "Bearer $token")
-        }.body()
+    override suspend fun authenticate(): UserResponse {
+        return httpClient.get("authenticate").body()
     }
 
     override suspend fun getChats(
-        token: String,
         paginationParams: PaginationParams
     ): PaginatedChatResponse {
         return httpClient.get ("conversations"){
-            header(HttpHeaders.Authorization, "Bearer $token")
             url {
                 parameters.append("offset", paginationParams.offset)
                 parameters.append("limit", paginationParams.limit)
