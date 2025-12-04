@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
@@ -153,10 +154,11 @@ fun ChatsScreen(
                         action = {
                             PrimaryButton(
                                 text = stringResource(R.string.common_try_again),
-                                onClick = onTryAgainClick
+                                onClick = onTryAgainClick,
+                                modifier = Modifier
+                                    .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium))
                             )
                         }
-
                     )
                 }
             }
