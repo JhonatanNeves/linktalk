@@ -24,6 +24,8 @@ Para o desenvolvimento desta aplicação utilizei as seguintes tecnologias:
 
 - Jetpack Compose para UI;
 - Componentes de Arquitetura;
+- MVVM;
+- Clean Code;
 - Injeção de dependência com Dagger Hilt;
 - Tecnologia WebSocket;
 - Ktor na camada de netwrok para requisições REST;
