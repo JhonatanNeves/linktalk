@@ -1,9 +1,10 @@
-# OnGoing
-## linktalk
+## LinkTalk
 
-##### Acesse o [FIGMA](https://www.figma.com/design/39yq2GG79kH2MFSRVnlhrb/LinkTalk-Project?t=dwGhGdt52pQXon4Z-0) do Projeto
+### 📱 Layout do Projeto
 
-##### Click na img para acesar um tammanho maior.
+#### Para visualizar a estrutura de telas e o Design System utilizado:
+
+[![Figma](https://img.shields.io/badge/Acessar_Layout-Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/39yq2GG79kH2MFSRVnlhrb/LinkTalk-Project?t=dwGhGdt52pQXon4Z-0)
 
 <img width="1100" alt="Captura de Tela 2024-12-16 às 18 52 44" src="https://github.com/user-attachments/assets/f98e4d8b-78b4-4934-813d-39f46f2646ef" />
 
