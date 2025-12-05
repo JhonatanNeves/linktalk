@@ -1,7 +1,9 @@
 # OnGoing
 ## linktalk
 
-[FIGMA](https://www.figma.com/design/39yq2GG79kH2MFSRVnlhrb/LinkTalk-Project?t=dwGhGdt52pQXon4Z-0)
+##### Acesse o [FIGMA](https://www.figma.com/design/39yq2GG79kH2MFSRVnlhrb/LinkTalk-Project?t=dwGhGdt52pQXon4Z-0) do Projeto
+
+##### Click na img para acesar um tammanho maior.
 
 <img width="1100" alt="Captura de Tela 2024-12-16 às 18 52 44" src="https://github.com/user-attachments/assets/f98e4d8b-78b4-4934-813d-39f46f2646ef" />
 
