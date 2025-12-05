@@ -1,67 +1,60 @@
-## LinkTalk
+# 💬 LinkTalk
 
-### 📱 Layout do Projeto
+> Uma aplicação de chat moderna, desenvolvida do zero com as melhores práticas de Engenharia de Software Mobile.
 
-#### Para visualizar a estrutura de telas e o Design System utilizado:
+O **LinkTalk** é uma aplicação de mensagens em tempo real que simula um ambiente profissional de chat. O projeto foi construído para demonstrar proficiência em **Android Nativo Moderno**, utilizando arquitetura escalável e tecnologias de ponta como Jetpack Compose e WebSockets.
+
+---
+
+## 📱 Layout & Design
+
+O layout foi desenhado com foco na experiência do usuário (UX/UI). Você pode visualizar o protótipo de alta fidelidade e o Design System no link abaixo:
 
 [![Figma](https://img.shields.io/badge/Acessar_Layout-Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/39yq2GG79kH2MFSRVnlhrb/LinkTalk-Project?t=dwGhGdt52pQXon4Z-0)
 
-<img width="1100" alt="Captura de Tela 2024-12-16 às 18 52 44" src="https://github.com/user-attachments/assets/f98e4d8b-78b4-4934-813d-39f46f2646ef" />
+<div align="center">
+  <img width="100%" alt="Preview do LinkTalk" src="https://github.com/user-attachments/assets/f98e4d8b-78b4-4934-813d-39f46f2646ef" />
+</div>
 
-## Como a aplicação funciona?
-O aplicativo deve exibir uma lista de contatos e conversas administrados no back-end, podendo criar um perfil personalizado de usuário , podendo interarir com outros usuários atraves de chat.
-
-## Funcionalidades?
-
-- [x] Tela de Login (Com email e senha);
-- [ ] Login com conta existente (Google, Facebook, etc.);
-- [x] Tela de splash personalizada;
-- [ ] Perfil do Usuário;
-- [ ] Contatos;
-- [ ] Conversas Lista de chats recentes com prévia da última mensagem;
-- [ ] Chat individual;
-
-## 🛠 Principais Tecnologias utilizadas
-
-Para o desenvolvimento desta aplicação utilizei as seguintes tecnologias:
-
-- Jetpack Compose para UI;
-- Componentes de Arquitetura;
-- MVVM;
-- Clean Code;
-- Injeção de dependência com Dagger Hilt;
-- Tecnologia WebSocket;
-- Ktor na camada de netwrok para requisições REST;
-- Repository Pattern;
-
-## 🚀 Pré-requisitos
-- Android Studio Flamingo ou superior
-
-- Java 11+ ou Kotlin
-- Gradle 8.0+
-- Conexão com Firebase (Auth, Firestore, Storage, Cloud Messaging)
-
-## 🚀 Como testar a aplicação
-
-```bash
-# Clone o repositório
-git clone https://github.com/JhonatanNeves/linktalk.git
-
-# Abra no Android Studio
-
-# Configure o Firebase:
-Crie um projeto no Firebase Console
-Baixe o arquivo google-services.json e coloque na pasta app/
-Habilite:
-- Authentication (Email/Password, Google, etc.)
-- Firestore Database
-- Storage
-- Cloud Messaging (para notificações)
-
-## Sincronize e execute o projeto:
-Sincronize o Gradle
-Rode em um dispositivo/emulador Android
-```
 ---
 
-#### O LinkTalk é uma aplicação de chat desenvolvido do absoluto zero, colocando em prática conhecimento voltado ao mercado, utilizando tecnologias modernas no desenvolvimento Anrdoid moderno.
+## ✨ Funcionalidades
+
+O aplicativo gerencia contatos e conversas via back-end, permitindo a criação de perfil e interação via chat.
+
+- [x] **Autenticação:** Tela de Login (Email e Senha);
+- [ ] **Social Login:** Integração com Google e Facebook;
+- [x] **UI:** Tela de Splash personalizada;
+- [ ] **Perfil:** Edição e visualização de perfil do usuário;
+- [ ] **Contatos:** Listagem e gerenciamento;
+- [ ] **Home:** Lista de chats recentes com prévia da última mensagem;
+- [ ] **Mensageria:** Chat individual em tempo real (WebSocket).
+
+---
+
+## 🛠 Tecnologias e Arquitetura
+
+O projeto segue os princípios de **Clean Architecture** e **MVVM**, garantindo desacoplamento e testabilidade.
+
+* **Linguagem:** Kotlin 100%
+* **Interface (UI):** Jetpack Compose (Material Design 3)
+* **Injeção de Dependência:** Dagger Hilt
+* **Networking:** Ktor (REST & WebSockets)
+* **Persistência:** Room & DataStore
+* **Concorrência:** Coroutines & Flow
+* **BaaS:** Firebase (Auth, Firestore, Storage, Cloud Messaging)
+
+---
+
+## 🚀 Como executar o projeto
+
+### Pré-requisitos
+* Android Studio Flamingo ou superior
+* Java 11+ / Kotlin
+* Dispositivo ou Emulador Android
+
+### Passo a Passo
+
+1. **Clone o repositório:**
+```bash
+git clone [https://github.com/JhonatanNeves/linktalk.git](https://github.com/JhonatanNeves/linktalk.git)
