@@ -4,6 +4,8 @@ import com.example.linktalk.data.repository.AuthRepository
 import com.example.linktalk.data.repository.AuthRepositoryImpl
 import com.example.linktalk.data.repository.ChatRepository
 import com.example.linktalk.data.repository.ChatRepositoryImpl
+import com.example.linktalk.data.repository.UserRepository
+import com.example.linktalk.data.repository.UserRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,4 +19,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindChatRepository(repository: ChatRepositoryImpl): ChatRepository
+
+    @Binds
+    fun bingUserRepository(repository: UserRepositoryImpl): UserRepository
 }
