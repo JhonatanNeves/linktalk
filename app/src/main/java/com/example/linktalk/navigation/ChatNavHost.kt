@@ -17,6 +17,7 @@ import com.example.linktalk.ui.feature.chats.navigateToChats
 import com.example.linktalk.ui.feature.signin.SingInRoute
 import com.example.linktalk.ui.feature.signup.SignUpRoute
 import com.example.linktalk.ui.feature.splash.SplashRoute
+import com.example.linktalk.ui.feature.users.UsersRoute
 import kotlinx.serialization.Serializable
 
 @SuppressLint("ContextCastToActivity")
@@ -86,6 +87,10 @@ fun ChatNavHost(
 
         composable<Route.ChatsRoute> {
             ChatsRoute()
+        }
+
+        composable<Route.UsersRoute>{
+            UsersRoute()
         }
     }
 }
