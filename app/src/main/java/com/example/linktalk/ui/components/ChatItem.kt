@@ -48,8 +48,8 @@ fun ChatItem(
             lastMessageTimeRef,
             unreadMessageCountRef,
         ) = createRefs()
-        AsyncImage(
-            model = receiver.profilePictureUrl,
+        RoundedAvatar(
+            imageUri = receiver.profilePictureUrl,
             contentDescription = null,
             modifier = Modifier
                 .clip(CircleShape)
@@ -59,9 +59,6 @@ fun ChatItem(
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom, margin = 16.dp)
                 },
-            placeholder = painterResource(R.drawable.no_profile_image),
-            error = painterResource(R.drawable.no_profile_image),
-            fallback = painterResource(R.drawable.no_profile_image),
         )
 
         Text(

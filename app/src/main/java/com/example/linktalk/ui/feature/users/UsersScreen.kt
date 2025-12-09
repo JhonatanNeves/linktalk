@@ -1,10 +1,13 @@
 package com.example.linktalk.ui.feature.users
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +22,8 @@ import com.example.linktalk.model.User
 import com.example.linktalk.model.fake.user2
 import com.example.linktalk.model.fake.user3
 import com.example.linktalk.model.fake.user4
+import com.example.linktalk.ui.components.UserItem
+import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
 import kotlinx.coroutines.flow.flowOf
 
@@ -39,15 +44,24 @@ fun UsersScreen(
     Scaffold { paddingValues ->
         LazyColumn(
             modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
                 .fillMaxSize()
                 .padding(paddingValues),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(pagingUsers.itemCount) { index ->
                 val user = pagingUsers[index]
                 if (user != null) {
-                    Text(text = user.firstName)
+                    UserItem(user = user)
+
+                    if (index < pagingUsers.itemCount - 1) {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .padding(top = 16.dp),
+                            color = Grey1
+                        )
+                    }
                 }
             }
         }
