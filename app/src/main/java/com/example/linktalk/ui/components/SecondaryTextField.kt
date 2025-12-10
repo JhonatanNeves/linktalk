@@ -60,7 +60,8 @@ fun SecondaryTextField(
             inputText = it
             onValueChange(it)
         },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .padding(16.dp),
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
             fontWeight = FontWeight.Bold,

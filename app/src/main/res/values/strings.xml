@@ -43,6 +43,9 @@
     <string name="feature_chats_empty_list">Empty conversation list.\nStart a new conversation by clicking the + button below.</string>
 
     <string name="error_message_profile_picture_uploading_failed">Error loading profile picture. Please try again. (Supported formats: jpg, jpeg, png)</string>
+    <string name="feature_users_title">Users</string>
+    <string name="feature_users_empty_list">No users are available to start a conversation.</string>
+
 
     <string name="splash_safety_info">Secure, encrypted and private messaging</string>
     <string name="error_message_when_opening_app">An unexpected error occurred while opening the application.\n\nPlease try again later.</string>

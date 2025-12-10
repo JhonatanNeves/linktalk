@@ -26,7 +26,7 @@ O aplicativo gerencia contatos e conversas via back-end, permitindo a criação 
 - [ ] **Social Login:** Integração com Google e Facebook;
 - [x] **UI:** Tela de Splash personalizada;
 - [ ] **Perfil:** Edição e visualização de perfil do usuário;
-- [ ] **Contatos:** Listagem e gerenciamento;
+- [x] **Contatos:** Listagem e gerenciamento;
 - [ ] **Home:** Lista de chats recentes com prévia da última mensagem;
 - [ ] **Mensageria:** Chat individual em tempo real (WebSocket).
 
