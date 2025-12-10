@@ -3,8 +3,12 @@ package com.example.linktalk.ui.feature.users
 import com.example.linktalk.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,6 +34,7 @@ import com.example.linktalk.model.fake.user4
 import com.example.linktalk.ui.components.AnimatedContent
 import com.example.linktalk.ui.components.ChatScaffold
 import com.example.linktalk.ui.components.ChatTopAppBar
+import com.example.linktalk.ui.components.GeneralEmptyList
 import com.example.linktalk.ui.components.GeneralError
 import com.example.linktalk.ui.components.PrimaryButton
 import com.example.linktalk.ui.components.UserItem
@@ -72,22 +77,75 @@ fun UsersScreen(
                 )
             }
             is LoadState.NotLoading -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(pagingUsers.itemCount) { index ->
-                        val user = pagingUsers[index]
-                        if (user != null) {
-                            UserItem(user = user)
+                if (pagingUsers.itemCount == 0){
+                    GeneralEmptyList(
+                        message = stringResource(R.string.feature_users_empty_list),
+                        resource = {
+                            AnimatedContent(
+                                resId = R.raw.animation_empty_list
+                            )
+                        }
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surface)
+                            .fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(pagingUsers.itemCount) { index ->
+                            val user = pagingUsers[index]
+                            if (user != null) {
+                                UserItem(user = user)
 
-                            if (index < pagingUsers.itemCount - 1) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(top = 16.dp), color = Grey1
-                                )
+                                if (index < pagingUsers.itemCount - 1) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(top = 16.dp), color = Grey1
+                                    )
+                                }
+                            }
+                        }
+
+                        if(pagingUsers.loadState.append is LoadState.Loading) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+
+                        if(pagingUsers.loadState.append is LoadState.Error) {
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.feature_users_error_loading_more),
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                        color = MaterialTheme.colorScheme.error
+                                        )
+
+                                    PrimaryButton(
+                                        text = stringResource(R.string.common_try_again),
+                                        onClick = {
+                                            pagingUsers.retry()
+                                        },
+                                        modifier = Modifier
+                                            .padding(horizontal = 30.dp)
+                                            .height(46.dp),
+                                    )
+                                }
                             }
                         }
                     }

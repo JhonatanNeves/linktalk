@@ -50,5 +50,6 @@
     <string name="error_message_when_opening_app">Une erreur inattendue s\'est produite lors de l\'ouverture de l\'application.\n\nVeuillez réessayer plus tard.</string>
     <string name="splash_safety_info">Messagerie sécurisée, cryptée et privée</string>
     <string name="error_confirm_button_close_app">Fermez l\'application.</string>
+    <string name="feature_users_error_loading_more">Erreur lors du chargement des utilisateurs supplémentaires.</string>
 
 </resources>
