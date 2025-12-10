@@ -16,7 +16,8 @@ class UserRepositoryImpl @Inject constructor(
     override fun getUsers(limit: Int): Flow<PagingData<User>> {
         return Pager(
             config = PagingConfig(
-                pageSize = limit,
+                prefetchDistance = 3,
+                pageSize = 1,
                 enablePlaceholders = false,
             ),
             pagingSourceFactory = { UserPagingSource(netWorkDataSource)}
