@@ -12,12 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -93,7 +90,7 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.height(56.dp))
+            Spacer(modifier = Modifier.height(1.dp))
 
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = null)
 
@@ -109,10 +106,11 @@ fun SignUpScreen(
                 color = MaterialTheme.colorScheme.surface
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp),
+                    modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     ProfilePictureSelector(
                         imageUri = formState.profilePictureUri,
@@ -123,7 +121,7 @@ fun SignUpScreen(
                         isCompressingImage = formState.isCompressingImage,
                     )
 
-                    Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
 
                     SecondaryTextField(
                         label = stringResource(id = R.string.feature_sign_up_first_name),
@@ -179,7 +177,7 @@ fun SignUpScreen(
                         imeAction = ImeAction.Done,
                         errorText = formState.passwordConfirmationError?.let { stringResource(id = it) },
                     )
-                    Spacer(modifier = Modifier.height(36.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     PrimaryButton(
                         text = stringResource(id = R.string.feature_sign_up_button),

@@ -154,8 +154,7 @@ fun SingInScreen(
             onClick = {
                 onFormEvent(SignInFormEvent.Submit)
             },
-            modifier = Modifier
-                .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium)),
+            modifier = Modifier,
             isLoading = formState.isLoading,
 
             )

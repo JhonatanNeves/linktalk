@@ -1,7 +1,5 @@
 package com.example.linktalk.ui.components
 
-import android.R.attr.id
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -21,10 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.Visibility
-import coil.compose.AsyncImage
-import com.example.linktalk.R
 import com.example.linktalk.model.Chat
-import com.example.linktalk.model.User
 import com.example.linktalk.ui.preview.ChatPreviewParameterProvider
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
