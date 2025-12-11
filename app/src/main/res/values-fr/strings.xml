@@ -45,6 +45,9 @@
 
     <string name="feature_users_title">Utilisateurs</string>
     <string name="feature_users_empty_list">Aucun utilisateur n\'est disponible pour entamer une conversation.</string>
+    <string name="feature_chat_detail_text_field_placeholder">Message</string>
+    <string name="feature_chat_detail_empty_list">Envoyez un message pour démarrer la conversation.</string>
+    <string name="feature_chat_detail_error_loading_more">Erreur lors du chargement des messages suivants.</string>
 
     <string name="error_message_profile_picture_uploading_failed">Erreur lors du chargement de la photo de profil. Veuillez réessayer. (Formats pris en charge : jpg, jpeg, png)</string>
     <string name="error_message_when_opening_app">Une erreur inattendue s\'est produite lors de l\'ouverture de l\'application.\n\nVeuillez réessayer plus tard.</string>

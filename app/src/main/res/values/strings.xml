@@ -45,7 +45,9 @@
     <string name="error_message_profile_picture_uploading_failed">Error loading profile picture. Please try again. (Supported formats: jpg, jpeg, png)</string>
     <string name="feature_users_title">Users</string>
     <string name="feature_users_empty_list">No users are available to start a conversation.</string>
-
+    <string name="feature_chat_detail_text_field_placeholder">Message</string>
+    <string name="feature_chat_detail_empty_list">Send a message to start the conversation.</string>
+    <string name="feature_chat_detail_error_loading_more">Error loading more messages.</string>
 
     <string name="splash_safety_info">Secure, encrypted and private messaging</string>
     <string name="error_message_when_opening_app">An unexpected error occurred while opening the application.\n\nPlease try again later.</string>
