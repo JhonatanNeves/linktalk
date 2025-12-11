@@ -1,24 +1,21 @@
 package com.example.linktalk.navigation
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.linktalk.navigation.extension.slideInTo
 import com.example.linktalk.navigation.extension.slideOutTo
+import com.example.linktalk.ui.feature.chatdetail.ChatDetailRoute
 import com.example.linktalk.ui.feature.chats.ChatsRoute
 import com.example.linktalk.ui.feature.chats.navigateToChats
 import com.example.linktalk.ui.feature.signin.SingInRoute
 import com.example.linktalk.ui.feature.signup.SignUpRoute
 import com.example.linktalk.ui.feature.splash.SplashRoute
 import com.example.linktalk.ui.feature.users.UsersRoute
-import kotlinx.serialization.Serializable
 
 @SuppressLint("ContextCastToActivity")
 @Composable
@@ -26,7 +23,7 @@ fun ChatNavHost(
     navigationState: LinkTalkNavigationState
 ) {
     val navController = navigationState.navController
-    val activity = LocalContext.current as? Activity
+    val activity = LocalActivity.current
 
     NavHost(navController = navController, startDestination = Route.SplashRoute) {
         composable<Route.SplashRoute> {
@@ -90,7 +87,19 @@ fun ChatNavHost(
         }
 
         composable<Route.UsersRoute>{
-            UsersRoute()
+            UsersRoute(
+                navigateToChatDetail = { userId ->
+                    navController.navigate(Route.ChatDetailRoute(userId))
+                }
+            )
+        }
+
+        composable<Route.ChatDetailRoute>{
+            ChatDetailRoute(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
