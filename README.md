@@ -43,18 +43,3 @@ O projeto segue os princípios de **Clean Architecture** e **MVVM**, garantindo 
 * **Persistência:** Room & DataStore
 * **Concorrência:** Coroutines & Flow
 * **BaaS:** Firebase (Auth, Firestore, Storage, Cloud Messaging)
-
----
-
-## 🚀 Como executar o projeto
-
-### Pré-requisitos
-* Android Studio Flamingo ou superior
-* Java 11+ / Kotlin
-* Dispositivo ou Emulador Android
-
-### Passo a Passo
-
-1. **Clone o repositório:**
-```bash
-git clone [https://github.com/JhonatanNeves/linktalk.git](https://github.com/JhonatanNeves/linktalk.git)
