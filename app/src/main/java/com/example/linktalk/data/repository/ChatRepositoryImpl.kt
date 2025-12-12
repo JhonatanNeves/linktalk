@@ -10,7 +10,6 @@ import com.example.linktalk.data.database.LinkTalkChatDatabase
 import com.example.linktalk.data.database.entity.MessageEntity
 import com.example.linktalk.data.di.IoDispatcher
 import com.example.linktalk.data.manager.selfuser.SelfUserManager
-import com.example.linktalk.data.manager.token.TokenManager
 import com.example.linktalk.data.mapper.asDomainModel
 import com.example.linktalk.data.network.NetWorkDataSource
 import com.example.linktalk.data.network.model.PaginationParams
