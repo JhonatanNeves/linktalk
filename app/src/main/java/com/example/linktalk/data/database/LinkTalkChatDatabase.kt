@@ -20,8 +20,4 @@ abstract class LinkTalkChatDatabase : RoomDatabase() {
 
     abstract fun messageRemoteKeyDao(): MessageRemoteKeyDao
 
-    abstract fun clearMessageRemoteKey(): MessageRemoteKeyDao
-
-
-
 }
