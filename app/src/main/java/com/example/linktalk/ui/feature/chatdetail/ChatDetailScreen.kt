@@ -65,7 +65,7 @@ fun ChatDetailRoute(
         messageText = messageText,
         onNavigationIconClicked = {},
         onMessageChange = viewModel::onMessageChange,
-        onSendClicked = viewModel::sendMessage,
+        onSendClicked = viewModel::onSendMessageClicked,
     )
 }
 
