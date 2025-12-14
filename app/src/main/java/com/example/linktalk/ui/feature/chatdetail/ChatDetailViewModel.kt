@@ -10,12 +10,19 @@ import androidx.navigation.toRoute
 import androidx.paging.cachedIn
 import com.example.linktalk.data.repository.ChatRepository
 import com.example.linktalk.data.repository.UserRepository
+import com.example.linktalk.model.User
 import com.example.linktalk.navigation.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +37,15 @@ class ChatDetailViewModel @Inject constructor(
     private val chatDetailRoute = savedStateHandle.toRoute<Route.ChatDetailRoute>()
 
     private val sendMessageFlow = MutableSharedFlow<Unit>()
+
+    private val _getUserUiState = MutableStateFlow<GetUserUiState>(GetUserUiState.Loading)
+    val getUserUiState = _getUserUiState
+        .onStart { getUserDetail() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = GetUserUiState.Loading
+        )
     var messageText by mutableStateOf("")
         private set
 
@@ -61,5 +77,32 @@ class ChatDetailViewModel @Inject constructor(
             receiverId = chatDetailRoute.userId,
             message = messageText,
         )
+    }
+
+    private fun getUserDetail() {
+        viewModelScope.launch {
+            _getUserUiState.update {
+                GetUserUiState.Loading
+            }
+
+            userRepository.getUser(chatDetailRoute.userId).fold(
+                onSuccess = { user ->
+                    _getUserUiState.update {
+                        GetUserUiState.Success(user)
+                    }
+                },
+                onFailure = { error ->
+                    _getUserUiState.update {
+                        GetUserUiState.Error(error.message ?: "Unknown error")
+                    }
+                }
+            )
+        }
+    }
+
+    sealed interface GetUserUiState {
+        data object Loading : GetUserUiState
+        data class Success(val user: User) : GetUserUiState
+        data class Error(val message: String) : GetUserUiState
     }
 }

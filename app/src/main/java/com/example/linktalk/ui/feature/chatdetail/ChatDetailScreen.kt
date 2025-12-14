@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
@@ -38,6 +40,7 @@ import com.example.linktalk.model.fake.chatMessage2
 import com.example.linktalk.model.fake.chatMessage3
 import com.example.linktalk.model.fake.chatMessage4
 import com.example.linktalk.model.fake.chatMessage5
+import com.example.linktalk.model.fake.user2
 import com.example.linktalk.ui.components.AnimatedContent
 import com.example.linktalk.ui.components.ChatMessageBubble
 import com.example.linktalk.ui.components.ChatMessageTextField
@@ -57,13 +60,13 @@ fun ChatDetailRoute(
 ) {
     val pagingChatMessages = viewModel.pagingChatMessage.collectAsLazyPagingItems()
     val messageText = viewModel.messageText
-
-
+    val getUserUiState by viewModel.getUserUiState.collectAsStateWithLifecycle()
 
     ChatDetailScreen(
         pagingChatMessages = pagingChatMessages,
         messageText = messageText,
-        onNavigationIconClicked = {},
+        getUserUiState = getUserUiState,
+        onNavigationIconClicked = navigateBack,
         onMessageChange = viewModel::onMessageChange,
         onSendClicked = viewModel::onSendMessageClicked,
     )
@@ -74,6 +77,7 @@ fun ChatDetailRoute(
 fun ChatDetailScreen(
     pagingChatMessages: LazyPagingItems<ChatMessage>,
     messageText: String,
+    getUserUiState: ChatDetailViewModel.GetUserUiState,
     onNavigationIconClicked: () -> Unit,
     onMessageChange: (String) -> Unit,
     onSendClicked: () -> Unit,
@@ -85,37 +89,47 @@ fun ChatDetailScreen(
                     Row (
                         verticalAlignment = Alignment.CenterVertically
                     ){
-                        RoundedAvatar(
-                            imageUri = null,
-                            contentDescription = null,
-                            size = 42.dp,
-                        )
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp),
-                        ) {
-                            Text(
-                                text = "Bianca",
-                                color = MaterialTheme.colorScheme.inverseOnSurface,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                style = MaterialTheme.typography.titleMedium,
-                            )
+                        when (getUserUiState) {
+                            ChatDetailViewModel.GetUserUiState.Loading -> {
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                                )
+                            }
+                            is ChatDetailViewModel.GetUserUiState.Success -> {
+                                RoundedAvatar(
+                                    imageUri = getUserUiState.user.profilePictureUrl,
+                                    contentDescription = null,
+                                    size = 42.dp,
+                                )
+                                Column(
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp),
+                                ) {
+                                    Text(
+                                        text = getUserUiState.user.firstName,
+                                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 1,
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
 
-                            Text(
-                                text = "Online",
-                                color = MaterialTheme.colorScheme.inverseOnSurface,
-                                style = MaterialTheme.typography.labelMedium,
-                            )
+                                    Text(
+                                        text = "Online",
+                                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                                        style = MaterialTheme.typography.labelMedium,
+                                    )
+                                }
+                            }
+                            is ChatDetailViewModel.GetUserUiState.Error -> {}
                         }
                     }
                 },
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = null,
                         modifier = Modifier
-                            .clickable{
+                            .clickable {
                                 onNavigationIconClicked()
                             },
                         tint = MaterialTheme.colorScheme.inverseOnSurface
@@ -241,13 +255,12 @@ fun ChatDetailScreen(
                 onSendClicked = onSendClicked,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .padding(bottom = 16.dp , top = 8.dp),
+                    .padding(bottom = 16.dp, top = 8.dp),
                 placeholder = stringResource(R.string.feature_chat_detail_text_field_placeholder)
             )
         }
     }
 }
-
 
 @Preview(showBackground = true, locale = "en")
 @Preview(showBackground = true, locale = "fr")
@@ -274,6 +287,7 @@ private fun ChatDetailPreview() {
         ChatDetailScreen(
             pagingChatMessages = pagingChatMessages,
             messageText = "",
+            getUserUiState = ChatDetailViewModel.GetUserUiState.Success(user2),
             onNavigationIconClicked = {},
             onMessageChange = {},
             onSendClicked = {}
