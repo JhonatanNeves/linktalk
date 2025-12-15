@@ -25,14 +25,14 @@ fun ChatNavHost(
     val navController = navigationState.navController
     val activity = LocalActivity.current
 
-    NavHost(navController = navController, startDestination = Route.SplashRoute) {
+    NavHost(navController = navController, startDestination = navigationState.startDestination) {
         composable<Route.SplashRoute> {
             SplashRoute(
-                onNavigateToSingIn = {
+                onNavigateToSignIn = {
                     navController.navigate(
-                        route = Route.SingInRoute,
+                        route = Route.SignInRoute,
                         navOptions = navOptions {
-                            popUpTo(route = Route.SplashRoute) {
+                            popUpTo(Route.SplashRoute) {
                                 inclusive = true
                             }
                         }
@@ -49,21 +49,21 @@ fun ChatNavHost(
                 },
                 onCloseApp = {
                     activity?.finish()
-                },
+                }
             )
         }
-        composable<Route.SingInRoute>(
+        composable<Route.SignInRoute>(
             enterTransition = { this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Right) },
             exitTransition = { this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Left) }
         ) {
             SingInRoute(
                 navigateToSignUp = {
-                    navController.navigate(Route.SingUpRoute)
+                    navController.navigate(Route.SignUpRoute)
                 },
                 navigateToMain = {
                     navController.navigateToChats(
                         navOptions = navOptions {
-                            popUpTo(Route.SingInRoute) {
+                            popUpTo(Route.SignInRoute) {
                                 inclusive = true
                             }
                         }
@@ -71,7 +71,7 @@ fun ChatNavHost(
                 }
             )
         }
-        composable<Route.SingUpRoute>(
+        composable<Route.SignUpRoute>(
             enterTransition = { this.slideInTo(AnimatedContentTransitionScope.SlideDirection.Left) },
             exitTransition = { this.slideOutTo(AnimatedContentTransitionScope.SlideDirection.Right) }
         ) {
@@ -81,7 +81,6 @@ fun ChatNavHost(
                 }
             )
         }
-
         composable<Route.ChatsRoute> {
             ChatsRoute()
         }

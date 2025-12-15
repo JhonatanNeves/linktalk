@@ -38,11 +38,11 @@ fun BottomNavigationMenu(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 0.dp,
     ) {
-        navigationState.topLevelDestination.forEach { topLevelDestination ->
+        navigationState.topLevelDestinations.forEach { topLevelDestination ->
             if (topLevelDestination == TopLevelDestination.PLUS_BUTTON) {
                 FloatingActionButton(
                     onClick = {
-                        navigationState.navigationToTopLevelDestination(topLevelDestination)
+                        navigationState.navigateToTopLevelDestination(topLevelDestination)
                     },
                     modifier = Modifier.padding(top = 6.dp),
                     shape = CircleShape,
@@ -52,18 +52,16 @@ fun BottomNavigationMenu(
                         defaultElevation = 0.dp,
                         pressedElevation = 0.dp,
                         hoveredElevation = 0.dp,
-                        focusedElevation = 0.dp
+                        focusedElevation = 0.dp,
                     )
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
-
             } else {
-                val selected =
-                    navigationState.currentDestination.isRouteInHierarchy(topLevelDestination.route)
+                val selected = navigationState.currentDestination.isRouteInHierarchy(topLevelDestination.route)
                 val label = topLevelDestination.titleRes?.let { labelResId ->
                     stringResource(labelResId)
                 }
@@ -71,13 +69,13 @@ fun BottomNavigationMenu(
                 NavigationBarItem(
                     selected = selected,
                     onClick = {
-                        navigationState.navigationToTopLevelDestination(topLevelDestination)
+                        navigationState.navigateToTopLevelDestination(topLevelDestination)
                     },
                     icon = {
                         topLevelDestination.iconRes?.let {
                             Icon(
                                 painter = painterResource(it),
-                                contentDescription = label
+                                contentDescription = label,
                             )
                         }
                     },

@@ -51,7 +51,6 @@ fun ChatsRoute(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-
 @Composable
 fun ChatsScreen(
     chatsListUiState: ChatsViewModel.ChatsListUiState,
