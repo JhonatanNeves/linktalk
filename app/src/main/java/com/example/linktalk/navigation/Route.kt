@@ -13,7 +13,7 @@ sealed interface Route {
     object SignUpRoute
 
     @Serializable
-    object ChatsRoute
+    data object ChatsRoute : Route
 
     @Serializable
     object UsersRoute
@@ -23,5 +23,4 @@ sealed interface Route {
 
     @Serializable
     data class ChatDetailRoute(val userId: Int)
-
 }

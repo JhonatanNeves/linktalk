@@ -15,7 +15,7 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.slideInTo(
     )
 }
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.slideOutTo(
+fun AnimatedContentTransitionScope<NavBackStackEntry>.slidOutTo(
     direction: AnimatedContentTransitionScope.SlideDirection
 ): ExitTransition {
     return this.slideOutOfContainer(
