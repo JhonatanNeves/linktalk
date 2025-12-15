@@ -47,7 +47,7 @@ import com.example.linktalk.ui.theme.LinkTalkTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SingInRoute(
+fun SignInRoute(
     viewModel: SignInViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     navigateToSignUp: () -> Unit,
