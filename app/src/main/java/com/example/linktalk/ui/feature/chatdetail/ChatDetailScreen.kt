@@ -20,7 +20,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,6 +46,7 @@ import com.example.linktalk.model.fake.chatMessage4
 import com.example.linktalk.model.fake.chatMessage5
 import com.example.linktalk.model.fake.user2
 import com.example.linktalk.ui.components.AnimatedContent
+import com.example.linktalk.ui.components.AppDialog
 import com.example.linktalk.ui.components.ChatMessageBubble
 import com.example.linktalk.ui.components.ChatMessageTextField
 import com.example.linktalk.ui.components.ChatScaffold
@@ -61,6 +66,31 @@ fun ChatDetailRoute(
     val pagingChatMessages = viewModel.pagingChatMessage.collectAsLazyPagingItems()
     val messageText = viewModel.messageText
     val getUserUiState by viewModel.getUserUiState.collectAsStateWithLifecycle()
+    var showErrorDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(pagingChatMessages.loadState.refresh){
+        viewModel.setPagingChatMessagesLoadState(pagingChatMessages.loadState.refresh)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.showError.collect {
+            showErrorDialog = it
+        }
+    }
+
+    if (showErrorDialog) {
+        AppDialog(
+            onDismissRequest = {
+                viewModel.resetShowErrorState()
+                navigateBack()
+            },
+            onConfirmButtonClick = {
+                viewModel.resetShowErrorState()
+                navigateBack()
+            },
+            message = stringResource(R.string.common_generic_error_message)
+        )
+    }
 
     ChatDetailScreen(
         pagingChatMessages = pagingChatMessages,

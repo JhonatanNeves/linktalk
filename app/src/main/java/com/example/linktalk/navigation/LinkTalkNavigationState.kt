@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.linktalk.ui.feature.chats.navigateToChats
@@ -25,15 +24,19 @@ fun rememberLinkTalkNavigationState(
 
 @Stable
 class LinkTalkNavigationState(
-    val navController: NavHostController,
+    val navController: NavHostController
 ) {
-
     private val previousDestination = mutableStateOf<NavDestination?>(null)
+
+    var startDestination: Route = Route.SplashRoute
+
     val currentDestination: NavDestination?
         @Composable get() {
+            // Collect the currentBackStackEntryFlow as a state
             val currentEntry = navController.currentBackStackEntryFlow
                 .collectAsState(initial = null)
 
+            // Fallback to previousDestination if currentEntry is null
             return currentEntry.value?.destination.also { destination ->
                 if (destination != null) {
                     previousDestination.value = destination
@@ -47,9 +50,9 @@ class LinkTalkNavigationState(
             currentDestination?.hasRoute(topLevelDestination.route) == true
         }
 
-    val topLevelDestination = TopLevelDestination.entries
+    val topLevelDestinations = TopLevelDestination.entries
 
-    fun navigationToTopLevelDestination(topLevelDestination: TopLevelDestination) {
+    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         val topLevelNavOptions = navOptions {
             popUpTo(Route.ChatsRoute) {
                 saveState = true
@@ -60,8 +63,11 @@ class LinkTalkNavigationState(
 
         when (topLevelDestination) {
             TopLevelDestination.CHATS -> navController.navigateToChats(topLevelNavOptions)
+
             TopLevelDestination.PLUS_BUTTON -> navController.navigateToUsers(topLevelNavOptions)
-            TopLevelDestination.PROFILE -> {}
+
+            TopLevelDestination.PROFILE -> {
+            }
         }
     }
 }

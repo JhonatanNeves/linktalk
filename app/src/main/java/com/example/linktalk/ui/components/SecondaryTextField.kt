@@ -19,7 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -83,7 +83,7 @@ fun SecondaryTextField(
                 Row (
                     modifier = Modifier
                         .bottomBorder(MaterialTheme.colorScheme.onSurfaceVariant, 1.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = CenterVertically
                 ){
 
                     Column(
@@ -99,14 +99,14 @@ fun SecondaryTextField(
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        Row (verticalAlignment = Alignment.CenterVertically){
+                        Row (verticalAlignment = CenterVertically){
 
                             Box(modifier = Modifier.weight(1f)){
                                 innerTextField()
                             }
                             extraText?.let {
                                 Text(
-                                    text = it,
+                                    text = extraText,
                                     modifier = Modifier.padding(4.dp),
                                     color = ColorSuccess,
                                     style = MaterialTheme.typography.bodyMedium,
@@ -116,7 +116,7 @@ fun SecondaryTextField(
                         }
                     }
 
-                    if (keyboardType == KeyboardType.Password && inputText.isNotEmpty()){
+                    if (keyboardType == KeyboardType.Password && inputText.isNotEmpty()) {
                         val visibilityIcon = if (passwordVisible) {
                             R.drawable.ic_visibility
                         } else {
@@ -124,7 +124,9 @@ fun SecondaryTextField(
                         }
 
                         IconButton(
-                            onClick = { passwordVisible = !passwordVisible },
+                            onClick = {
+                                passwordVisible = !passwordVisible
+                            }
                         ) {
                             Icon(
                                 painter = painterResource(id = visibilityIcon),
@@ -133,7 +135,6 @@ fun SecondaryTextField(
                             )
                         }
                     }
-
                 }
 
                  errorText?.let {
