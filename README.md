@@ -23,12 +23,12 @@ O layout foi desenhado com foco na experiência do usuário (UX/UI). Você pode 
 O aplicativo gerencia contatos e conversas via back-end, permitindo a criação de perfil e interação via chat.
 
 - [x] **Autenticação:** Tela de Login (Email e Senha);
-- [ ] **Social Login:** Integração com Google e Facebook;
+- [x] **Social Login:** Integração com Google e Facebook;
 - [x] **UI:** Tela de Splash personalizada;
-- [ ] **Perfil:** Edição e visualização de perfil do usuário;
+- [x] **Perfil:** Edição e visualização de perfil do usuário;
 - [x] **Contatos:** Listagem e gerenciamento;
-- [ ] **Home:** Lista de chats recentes com prévia da última mensagem;
-- [ ] **Mensageria:** Chat individual em tempo real (WebSocket).
+- [x] **Home:** Lista de chats recentes com prévia da última mensagem;
+- [x] **Mensageria:** Chat individual em tempo real (WebSocket).
 
 ---
 
