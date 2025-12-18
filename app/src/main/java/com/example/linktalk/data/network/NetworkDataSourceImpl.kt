@@ -7,6 +7,7 @@ import com.example.linktalk.data.network.model.PaginatedChatResponse
 import com.example.linktalk.data.network.model.PaginatedMessageResponse
 import com.example.linktalk.data.network.model.PaginatedUserResponse
 import com.example.linktalk.data.network.model.PaginationParams
+import com.example.linktalk.data.network.model.RegisterTokenRequest
 import com.example.linktalk.data.network.model.TokenResponse
 import com.example.linktalk.data.network.model.UserResponse
 import io.ktor.client.HttpClient
@@ -55,10 +56,16 @@ class NetworkDataSourceImpl @Inject constructor(
         return httpClient.get("authenticate").body()
     }
 
+    override suspend fun registerNotificationToken(registerTokenRequest: RegisterTokenRequest) {
+        return httpClient.post("notifications/register") {
+            setBody(registerTokenRequest)
+        }.body()
+    }
+
     override suspend fun getChats(
         paginationParams: PaginationParams
     ): PaginatedChatResponse {
-        return httpClient.get ("conversations"){
+        return httpClient.get("conversations") {
             url {
                 appendPaginationParams(paginationParams)
             }
@@ -66,13 +73,13 @@ class NetworkDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getUser(userId: Int): UserResponse {
-        return httpClient.get ("users/$userId").body()
+        return httpClient.get("users/$userId").body()
     }
 
     override suspend fun getUsers(
         paginationParams: PaginationParams
     ): PaginatedUserResponse {
-        return httpClient.get ("users"){
+        return httpClient.get("users") {
             url {
                 appendPaginationParams(paginationParams)
             }
@@ -83,7 +90,7 @@ class NetworkDataSourceImpl @Inject constructor(
         receiverId: Int,
         paginationParams: PaginationParams
     ): PaginatedMessageResponse {
-        return httpClient.get ("messages/$receiverId"){
+        return httpClient.get("messages/$receiverId") {
             url {
                 appendPaginationParams(paginationParams)
             }

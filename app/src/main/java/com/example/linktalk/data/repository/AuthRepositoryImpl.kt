@@ -1,12 +1,14 @@
 package com.example.linktalk.data.repository
 
 import com.example.linktalk.data.di.IoDispatcher
+import com.example.linktalk.data.manager.notification.NotificationManager
 import com.example.linktalk.data.manager.selfuser.SelfUserManager
 import com.example.linktalk.data.manager.token.TokenManager
 import com.example.linktalk.data.mapper.asDomainModel
 import com.example.linktalk.data.network.NetworkDataSource
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
+import com.example.linktalk.data.network.model.RegisterTokenRequest
 import com.example.linktalk.model.CreateAccount
 import com.example.linktalk.model.Image
 import com.example.linktalk.model.User
@@ -22,6 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val networkDataSource: NetworkDataSource,
     private val tokenManager: TokenManager,
     private val selfUserManager: SelfUserManager,
+    private val notificationManager: NotificationManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AuthRepository {
 
@@ -32,9 +35,6 @@ class AuthRepositoryImpl @Inject constructor(
             .map {
                 it.asDomainModel()
             }
-
-
-    //CryptoManager foi criado apenas para validar a arquitetura e as funcionalidades básicas do Jetpack Security com EncryptedSharedPreferences
 
     override suspend fun getAccessToken(): String? {
         return tokenManager.accessToken.firstOrNull()
@@ -104,6 +104,13 @@ class AuthRepositoryImpl @Inject constructor(
                     lastName = userResponse.lastName,
                     profilePictureUrl = userResponse.profilePictureUrl ?: "",
                     userName = userResponse.username,
+                )
+
+                val token = notificationManager.getToken()
+                networkDataSource.registerNotificationToken(
+                    registerTokenRequest = RegisterTokenRequest(
+                        token = token
+                    )
                 )
             }
         }

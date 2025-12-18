@@ -7,6 +7,7 @@ import com.example.linktalk.data.network.model.PaginatedChatResponse
 import com.example.linktalk.data.network.model.PaginatedMessageResponse
 import com.example.linktalk.data.network.model.PaginatedUserResponse
 import com.example.linktalk.data.network.model.PaginationParams
+import com.example.linktalk.data.network.model.RegisterTokenRequest
 import com.example.linktalk.data.network.model.TokenResponse
 import com.example.linktalk.data.network.model.UserResponse
 
@@ -18,6 +19,9 @@ interface NetworkDataSource {
     suspend fun upLoadProfilePicture(filePath: String): ImageResponse
 
     suspend fun authenticate(): UserResponse
+
+    suspend fun registerNotificationToken(registerTokenRequest: RegisterTokenRequest)
+
 
     suspend fun getChats(paginationParams: PaginationParams): PaginatedChatResponse
 

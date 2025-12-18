@@ -1,5 +1,9 @@
 package com.example.linktalk.ui.feature.chats
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -11,14 +15,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.linktalk.R
 import com.example.linktalk.model.Chat
@@ -37,25 +44,50 @@ import com.example.linktalk.ui.components.ChatItemShimmer
 import com.example.linktalk.ui.components.ChatScaffold
 import com.example.linktalk.ui.components.ChatTopAppBar
 import com.example.linktalk.ui.components.GeneralEmptyList
+import com.example.linktalk.ui.components.NotificationPermanentlyDeniedInfo
 import com.example.linktalk.ui.components.PrimaryButton
+import com.example.linktalk.ui.notification.NotificationPermissionHandler
 import com.example.linktalk.ui.theme.Grey1
 import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
 fun ChatsRoute(
     viewModel: ChatsViewModel = hiltViewModel(),
-    navigateToChatDetail: (Chat) -> Unit
+    navigateToChatDetail: (Chat) -> Unit,
+    context: Context = LocalContext.current
 ) {
     val user by viewModel.currentUserFlow.collectAsStateWithLifecycle()
     val chatsListUiState by viewModel.chatsListUiState.collectAsStateWithLifecycle()
 
+    var showPermissionPermanentlyDeniedInfo by remember {
+        mutableStateOf(false)
+    }
+
     ChatsScreen(
         user = user,
         chatsListUiState = chatsListUiState,
+        showPermissionPermanentlyDeniedInfo = showPermissionPermanentlyDeniedInfo,
+        onDismissClickPermanentlyDeniedInfo = {
+            showPermissionPermanentlyDeniedInfo = false
+        },
+        onGoToSettingsClick = {
+            context.startActivity(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", context.packageName, null)
+                }
+            )
+            showPermissionPermanentlyDeniedInfo = false
+        },
         onTryAgainClick = {
             viewModel.getChats(isRefresh = true)
         },
         onChatClick = navigateToChatDetail,
+    )
+
+    NotificationPermissionHandler(
+        onPermissionPermanentlyDenied = {
+            showPermissionPermanentlyDeniedInfo = true
+        }
     )
 }
 
@@ -64,6 +96,9 @@ fun ChatsRoute(
 fun ChatsScreen(
     user: User?,
     chatsListUiState: ChatsViewModel.ChatsListUiState,
+    showPermissionPermanentlyDeniedInfo: Boolean,
+    onDismissClickPermanentlyDeniedInfo: () -> Unit,
+    onGoToSettingsClick: () -> Unit,
     onTryAgainClick: () -> Unit,
     onChatClick: (Chat) -> Unit,
 ) {
@@ -82,7 +117,6 @@ fun ChatsScreen(
                         style = MaterialTheme.typography.titleLarge,
                     )
                 },
-                expandedHeight = 100.dp
             )
         },
     ) {
@@ -92,10 +126,10 @@ fun ChatsScreen(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                 ) {
-                    repeat(7) { index ->
+                    repeat(5) { index ->
                         ChatItemShimmer()
 
-                        if (index < 6) {
+                        if (index < 4) {
                             HorizontalDivider(
                                 color = Grey1
                             )
@@ -109,6 +143,9 @@ fun ChatsScreen(
                     true -> {
                         ChatsListContent(
                             chats = chatsListUiState.chats,
+                            showPermissionPermanentlyDeniedInfo = showPermissionPermanentlyDeniedInfo,
+                            onDismissClickPermanentlyDeniedInfo = onDismissClickPermanentlyDeniedInfo,
+                            onGoToSettingsClick = onGoToSettingsClick,
                             onChatClick = onChatClick,
                         )
                     }
@@ -121,11 +158,10 @@ fun ChatsScreen(
                                     resId = R.raw.animation_empty_list
                                 )
                             }
-
                         )
                     }
-
                 }
+
             }
 
             ChatsViewModel.ChatsListUiState.Error -> {
@@ -138,14 +174,11 @@ fun ChatsScreen(
                     action = {
                         PrimaryButton(
                             text = stringResource(R.string.common_try_again),
-                            onClick = onTryAgainClick,
-                            modifier = Modifier
-                                .padding(horizontal = dimensionResource(id = R.dimen.spacing_medium))
+                            onClick = onTryAgainClick
                         )
                     }
                 )
             }
-
         }
     }
 }
@@ -153,12 +186,28 @@ fun ChatsScreen(
 @Composable
 fun ChatsListContent(
     chats: List<Chat>,
-    onChatClick: (Chat) -> Unit,
+    showPermissionPermanentlyDeniedInfo: Boolean,
+    onDismissClickPermanentlyDeniedInfo: () -> Unit,
+    onGoToSettingsClick: () -> Unit,
+    onChatClick: (Chat) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-        itemsIndexed(chats) { index, chat ->
+        if (showPermissionPermanentlyDeniedInfo) {
+            item(key = "notification_info") {
+                NotificationPermanentlyDeniedInfo(
+                    onDismissClick = onDismissClickPermanentlyDeniedInfo,
+                    onGoToSettingsClick = onGoToSettingsClick,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                )
+            }
+        }
+
+        itemsIndexed(chats, key = { _, item ->
+            item.id
+        }) { index, chat ->
             ChatItem(
                 chat = chat,
                 onClick = {
@@ -183,6 +232,9 @@ private fun ChatsScreenLoadingPreview() {
         ChatsScreen(
             user = user1,
             chatsListUiState = ChatsViewModel.ChatsListUiState.Loading,
+            showPermissionPermanentlyDeniedInfo = false,
+            onDismissClickPermanentlyDeniedInfo = {},
+            onGoToSettingsClick = {},
             onTryAgainClick = {},
             onChatClick = {},
         )
@@ -203,6 +255,9 @@ private fun ChatsScreenSuccessPreview() {
                     chat3
                 ),
             ),
+            showPermissionPermanentlyDeniedInfo = true,
+            onDismissClickPermanentlyDeniedInfo = {},
+            onGoToSettingsClick = {},
             onTryAgainClick = {},
             onChatClick = {},
         )
@@ -219,8 +274,11 @@ private fun ChatsScreenSuccessEmptyPreview() {
             chatsListUiState = ChatsViewModel.ChatsListUiState.Success(
                 chats = emptyList(),
             ),
+            showPermissionPermanentlyDeniedInfo = false,
+            onDismissClickPermanentlyDeniedInfo = {},
+            onGoToSettingsClick = {},
             onTryAgainClick = {},
-            onChatClick = {}
+            onChatClick = {},
         )
     }
 }
@@ -233,8 +291,11 @@ private fun ChatsScreenErrorPreview() {
         ChatsScreen(
             user2,
             chatsListUiState = ChatsViewModel.ChatsListUiState.Error,
+            showPermissionPermanentlyDeniedInfo = false,
+            onDismissClickPermanentlyDeniedInfo = {},
+            onGoToSettingsClick = {},
             onTryAgainClick = {},
-            onChatClick = {}
+            onChatClick = {},
         )
     }
 }

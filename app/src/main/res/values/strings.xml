@@ -54,5 +54,12 @@
     <string name="error_confirm_button_close_app">Close Application.</string>
     <string name="feature_users_error_loading_more">Error loading more users.</string>
     <string name="feature_chat_detail_online_status">Online</string>
+    <string name="notification_chat_messages_channel_name">Chat message</string>
+    <string name="notification_request_permission_title">Enable notifications so you don\'t miss any messages.</string>
+    <string name="notification_request_permission_message">Receive alerts whenever someone sends you a new message. This way, you stay up-to-date on conversations in real time, even with the app closed.</string>
+    <string name="notification_request_permission_denied_title">Don\'t miss any messages</string>
+    <string name="notification_request_permission_denied_message">To continue receiving notifications of new messages, manually enable app notifications in your device settings.</string>
+    <string name="common_close">Fermer</string>
+    <string name="notification_turn_on_text">Activate</string>
 
 </resources>
