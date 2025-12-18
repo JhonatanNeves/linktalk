@@ -55,5 +55,12 @@
     <string name="error_confirm_button_close_app">Fermez l\'application.</string>
     <string name="feature_users_error_loading_more">Erreur lors du chargement des utilisateurs supplémentaires.</string>
     <string name="feature_chat_detail_online_status">Online</string>
+    <string name="notification_chat_messages_channel_name">Message de discussion</string>
+    <string name="notification_request_permission_title">Activez les notifications pour ne manquer aucun message.</string>
+    <string name="notification_request_permission_message">Recevez des alertes dès qu\'une personne vous envoie un nouveau message. Ainsi, vous restez informé(e) des conversations en temps réel, même lorsque l\'application est fermée.</string>
+    <string name="notification_request_permission_denied_title">Ne manquez aucun message</string>
+    <string name="notification_request_permission_denied_message">Pour continuer à recevoir des notifications de nouveaux messages, activez manuellement les notifications de l\'application dans les paramètres de votre appareil.</string>
+    <string name="common_close">Fermer</string>
+    <string name="notification_turn_on_text">Activer</string>
 
 </resources>
