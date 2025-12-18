@@ -1,7 +1,7 @@
 package com.example.linktalk.data.network.di
 
-import com.example.linktalk.data.network.NetworkDataSource
-import com.example.linktalk.data.network.NetworkDataSourceImpl
+import com.example.linktalk.data.network.ws.ChatWebSocketService
+import com.example.linktalk.data.network.ws.ChatWebSocketServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -10,8 +10,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NetworkDataSourceModule {
+interface WebSocketModule {
+
     @Binds
     @Singleton
-    fun bindNetworkDataSource(networkDataSource: NetworkDataSourceImpl) : NetworkDataSource
+    fun bindWebSocketService(chatWebSocketService: ChatWebSocketServiceImpl): ChatWebSocketService
 }

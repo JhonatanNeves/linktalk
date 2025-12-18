@@ -53,5 +53,6 @@
     <string name="error_message_when_opening_app">An unexpected error occurred while opening the application.\n\nPlease try again later.</string>
     <string name="error_confirm_button_close_app">Close Application.</string>
     <string name="feature_users_error_loading_more">Error loading more users.</string>
+    <string name="feature_chat_detail_online_status">Online</string>
 
 </resources>

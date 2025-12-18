@@ -6,27 +6,35 @@ import com.example.linktalk.data.repository.ChatRepository
 import com.example.linktalk.model.Chat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatsViewModel  @Inject constructor(
+class ChatsViewModel @Inject constructor(
     private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private val _chatsListUiState = MutableStateFlow<ChatsListUiState>(ChatsListUiState.Loading)
-    val chatsListUiState = _chatsListUiState.asStateFlow()
+    val chatsListUiState = _chatsListUiState
+        .onStart {
+            getChats()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = ChatsListUiState.Loading
+        )
 
-    init {
-        getChats()
-    }
-
-    fun getChats() {
+    fun getChats(isRefresh: Boolean = false) {
         viewModelScope.launch {
-            _chatsListUiState.update {
-                ChatsListUiState.Loading
+            if (isRefresh) {
+                _chatsListUiState.update {
+                    ChatsListUiState.Loading
+                }
             }
 
             chatRepository.getChats(
@@ -46,6 +54,7 @@ class ChatsViewModel  @Inject constructor(
             )
         }
     }
+
     sealed interface ChatsListUiState {
         data object Loading : ChatsListUiState
         data class Success(val chats: List<Chat>) : ChatsListUiState

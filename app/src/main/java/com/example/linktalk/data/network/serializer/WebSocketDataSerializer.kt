@@ -16,6 +16,7 @@ import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.serializer
 
+// ESTUDAR A FUNDO
 object WebSocketDataSerializer : KSerializer<WebSocketData> {
 
     @Suppress("UNCHECKED_CAST")
@@ -60,5 +61,4 @@ object WebSocketDataSerializer : KSerializer<WebSocketData> {
     private fun getDataSerializer(type: String): KSerializer<Any> {
         return typeSerializer[type] ?: throw SerializationException("Unknown type $type")
     }
-
 }

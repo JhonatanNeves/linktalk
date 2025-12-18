@@ -10,7 +10,7 @@ import com.example.linktalk.data.network.model.PaginationParams
 import com.example.linktalk.data.network.model.TokenResponse
 import com.example.linktalk.data.network.model.UserResponse
 
-interface NetWorkDataSource {
+interface NetworkDataSource {
     suspend fun signUp(request: CreatAccountRequest)
 
     suspend fun signIn(request: AuthRequest): TokenResponse

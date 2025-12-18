@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
@@ -63,6 +65,7 @@ fun ChatDetailRoute(
     viewModel: ChatDetailViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
+    val isUserOnline by viewModel.isUserOnline.collectAsStateWithLifecycle()
     val pagingChatMessages = viewModel.pagingChatMessage.collectAsLazyPagingItems()
     val messageText = viewModel.messageText
     val getUserUiState by viewModel.getUserUiState.collectAsStateWithLifecycle()
@@ -76,6 +79,15 @@ fun ChatDetailRoute(
         viewModel.showError.collect {
             showErrorDialog = it
         }
+    }
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.onResume()
+
+        onPauseOrDispose {
+            viewModel.onPause()
+        }
+
     }
 
     if (showErrorDialog) {
@@ -93,6 +105,7 @@ fun ChatDetailRoute(
     }
 
     ChatDetailScreen(
+        isUserOnline = isUserOnline,
         pagingChatMessages = pagingChatMessages,
         messageText = messageText,
         getUserUiState = getUserUiState,
@@ -105,6 +118,7 @@ fun ChatDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatDetailScreen(
+    isUserOnline: Boolean,
     pagingChatMessages: LazyPagingItems<ChatMessage>,
     messageText: String,
     getUserUiState: ChatDetailViewModel.GetUserUiState,
@@ -113,6 +127,8 @@ fun ChatDetailScreen(
     onSendClicked: () -> Unit,
 ) {
     ChatScaffold(
+        modifier = Modifier
+            .imePadding(),
         topBar = {
             ChatTopAppBar(
                 title = {
@@ -143,11 +159,13 @@ fun ChatDetailScreen(
                                         style = MaterialTheme.typography.titleMedium,
                                     )
 
-                                    Text(
-                                        text = "Online",
-                                        color = MaterialTheme.colorScheme.inverseOnSurface,
-                                        style = MaterialTheme.typography.labelMedium,
-                                    )
+                                    if (isUserOnline){
+                                        Text(
+                                            text = stringResource(R.string.feature_chat_detail_online_status),
+                                            color = MaterialTheme.colorScheme.inverseOnSurface,
+                                            style = MaterialTheme.typography.labelMedium,
+                                        )
+                                    }
                                 }
                             }
                             is ChatDetailViewModel.GetUserUiState.Error -> {}
@@ -315,6 +333,7 @@ private fun ChatDetailPreview() {
         ).collectAsLazyPagingItems()
 
         ChatDetailScreen(
+            isUserOnline = true,
             pagingChatMessages = pagingChatMessages,
             messageText = "",
             getUserUiState = ChatDetailViewModel.GetUserUiState.Success(user2),

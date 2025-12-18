@@ -10,12 +10,12 @@ import com.example.linktalk.data.database.LinkTalkChatDatabase
 import com.example.linktalk.data.database.entity.MessageEntity
 import com.example.linktalk.data.database.entity.MessageRemoteKeyEntity
 import com.example.linktalk.data.mapper.asEntityModel
-import com.example.linktalk.data.network.NetWorkDataSource
+import com.example.linktalk.data.network.NetworkDataSource
 import com.example.linktalk.data.network.model.PaginationParams
 
 @OptIn(ExperimentalPagingApi::class)
 class MessageRemoteMediator(
-    private val networkDataSource: NetWorkDataSource,
+    private val networkDataSource: NetworkDataSource,
     private val databaseDataSource: DatabaseDataSource,
     private val database: LinkTalkChatDatabase,
     private val receiverId: Int,
