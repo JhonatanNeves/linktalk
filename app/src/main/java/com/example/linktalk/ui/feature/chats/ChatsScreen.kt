@@ -38,15 +38,17 @@ import com.example.linktalk.ui.theme.LinkTalkTheme
 
 @Composable
 fun ChatsRoute(
-    viewModel: ChatsViewModel = hiltViewModel()
+    viewModel: ChatsViewModel = hiltViewModel(),
+    navigateToChatDetail: (Chat) -> Unit
 ) {
     val chatsListUiState by viewModel.chatsListUiState.collectAsStateWithLifecycle()
 
     ChatsScreen(
         chatsListUiState = chatsListUiState,
         onTryAgainClick = {
-            viewModel.getChats()
-        }
+            viewModel.getChats(isRefresh = true)
+        },
+        onChatClick = navigateToChatDetail,
     )
 }
 
@@ -54,7 +56,8 @@ fun ChatsRoute(
 @Composable
 fun ChatsScreen(
     chatsListUiState: ChatsViewModel.ChatsListUiState,
-    onTryAgainClick: () -> Unit
+    onTryAgainClick: () -> Unit,
+    onChatClick: (Chat) -> Unit,
 ) {
     ChatScaffold(
         topBar = {
@@ -96,7 +99,10 @@ fun ChatsScreen(
             is ChatsViewModel.ChatsListUiState.Success -> {
                 when (chatsListUiState.chats.isNotEmpty()) {
                     true -> {
-                        ChatsListContent(chatsListUiState.chats)
+                        ChatsListContent(
+                            chats = chatsListUiState.chats,
+                            onChatClick = onChatClick,
+                        )
                     }
 
                     false -> {
@@ -112,7 +118,6 @@ fun ChatsScreen(
                     }
 
                 }
-                ChatsListContent(chatsListUiState.chats)
             }
 
             ChatsViewModel.ChatsListUiState.Error -> {
@@ -138,12 +143,20 @@ fun ChatsScreen(
 }
 
 @Composable
-fun ChatsListContent(chats: List<Chat>) {
+fun ChatsListContent(
+    chats: List<Chat>,
+    onChatClick: (Chat) -> Unit,
+) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         itemsIndexed(chats) { index, chat ->
-            ChatItem(chat)
+            ChatItem(
+                chat = chat,
+                onClick = {
+                    onChatClick(chat)
+                }
+            )
 
             if (index < chats.lastIndex) {
                 HorizontalDivider(
@@ -161,7 +174,8 @@ private fun ChatsScreenLoadingPreview() {
     LinkTalkTheme {
         ChatsScreen(
             chatsListUiState = ChatsViewModel.ChatsListUiState.Loading,
-            onTryAgainClick = {}
+            onTryAgainClick = {},
+            onChatClick = {},
         )
     }
 }
@@ -179,7 +193,8 @@ private fun ChatsScreenSuccessPreview() {
                     chat3
                 ),
             ),
-            onTryAgainClick = {}
+            onTryAgainClick = {},
+            onChatClick = {},
         )
     }
 }
@@ -194,6 +209,7 @@ private fun ChatsScreenSuccessEmptyPreview() {
                 chats = emptyList(),
             ),
             onTryAgainClick = {},
+            onChatClick = {}
         )
     }
 }
@@ -205,7 +221,8 @@ private fun ChatsScreenErrorPreview() {
     LinkTalkTheme {
         ChatsScreen(
             chatsListUiState = ChatsViewModel.ChatsListUiState.Error,
-            onTryAgainClick = {}
+            onTryAgainClick = {},
+            onChatClick = {}
         )
     }
 }

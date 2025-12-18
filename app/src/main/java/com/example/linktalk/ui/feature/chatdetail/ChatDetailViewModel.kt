@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
+import com.example.linktalk.data.network.ws.SocketMessageResult
 import com.example.linktalk.data.repository.ChatRepository
 import com.example.linktalk.data.repository.UserRepository
 import com.example.linktalk.model.User
@@ -19,9 +20,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -40,6 +44,9 @@ class ChatDetailViewModel @Inject constructor(
     private val chatDetailRoute = savedStateHandle.toRoute<Route.ChatDetailRoute>()
 
     private val sendMessageFlow = MutableSharedFlow<Unit>()
+
+    private val _isUserOnline = MutableStateFlow(false)
+    val isUserOnline = _isUserOnline.asStateFlow()
 
     private val _getUserUiState = MutableStateFlow<GetUserUiState>(GetUserUiState.Loading)
     val getUserUiState = _getUserUiState
@@ -77,7 +84,7 @@ class ChatDetailViewModel @Inject constructor(
                 Pair(getUserUiState, pagingChatMessagesState)
             }.collect {
                 val (getUserUiState, pagingChatMessagesState) = it
-                if (getUserUiState is GetUserUiState.Error || pagingChatMessagesState is LoadState.Error){
+                if (getUserUiState is GetUserUiState.Error || pagingChatMessagesState is LoadState.Error) {
                     _showError.send(true)
                 }
             }
@@ -96,10 +103,18 @@ class ChatDetailViewModel @Inject constructor(
     }
 
     private suspend fun sendMessage() {
-        chatRepository.sendMessage(
-            receiverId = chatDetailRoute.userId,
-            message = messageText,
-        )
+        if (messageText.isNotBlank()) {
+            chatRepository.sendMessage(
+                receiverId = chatDetailRoute.userId,
+                message = messageText,
+            ).fold(
+                onSuccess = {
+                    messageText = ""
+                },
+                onFailure = {
+                }
+            )
+        }
     }
 
     private fun getUserDetail() {
@@ -132,6 +147,44 @@ class ChatDetailViewModel @Inject constructor(
     fun resetShowErrorState() {
         viewModelScope.launch {
             _showError.send(false)
+        }
+    }
+
+    fun onResume() {
+        viewModelScope.launch {
+            chatRepository.connectWebsocket().fold(
+                onSuccess = {
+                    chatRepository.observeSocketMessageResultFlow()
+                        .onEach {
+                            updateUserOnlineInfo(it)
+                        }
+                        .launchIn(viewModelScope)
+                },
+                onFailure = {
+                }
+            )
+        }
+    }
+
+    private fun updateUserOnlineInfo(socketMessageResult: SocketMessageResult) {
+        if (socketMessageResult is SocketMessageResult.ActiveUsersChanged) {
+            _isUserOnline.update {
+                socketMessageResult.activeUserIdsResponse.activeUserIds
+                    .contains(chatDetailRoute.userId)
+            }
+        }
+    }
+
+    fun onPause() {
+        viewModelScope.launch {
+            chatRepository.disconnectWebsocket()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.launch {
+            chatRepository.disconnectWebsocket()
         }
     }
 

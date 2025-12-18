@@ -11,13 +11,9 @@ import com.example.linktalk.data.network.model.TokenResponse
 import com.example.linktalk.data.network.model.UserResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerAuthProvider
-import io.ktor.client.plugins.plugin
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.Headers
@@ -28,7 +24,7 @@ import javax.inject.Inject
 
 class NetworkDataSourceImpl @Inject constructor(
     private val httpClient: HttpClient
-) : NetWorkDataSource {
+) : NetworkDataSource {
     override suspend fun signUp(request: CreatAccountRequest) {
         httpClient.post("signup") {
             setBody(request)

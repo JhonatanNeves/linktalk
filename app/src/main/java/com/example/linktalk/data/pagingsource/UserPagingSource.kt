@@ -3,13 +3,13 @@ package com.example.linktalk.data.pagingsource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.linktalk.data.mapper.asDomainModel
-import com.example.linktalk.data.network.NetWorkDataSource
+import com.example.linktalk.data.network.NetworkDataSource
 import com.example.linktalk.data.network.model.PaginationParams
 import com.example.linktalk.model.User
 import javax.inject.Inject
 
 class UserPagingSource @Inject constructor(
-    private val networkDataSource: NetWorkDataSource,
+    private val networkDataSource: NetworkDataSource,
 ) : PagingSource<Int, User>() {
     override suspend fun load(
         params: LoadParams<Int>

@@ -3,7 +3,7 @@ package com.example.linktalk.data.repository
 import com.example.linktalk.data.di.IoDispatcher
 import com.example.linktalk.data.manager.selfuser.SelfUserManager
 import com.example.linktalk.data.manager.token.TokenManager
-import com.example.linktalk.data.network.NetWorkDataSource
+import com.example.linktalk.data.network.NetworkDataSource
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
 import com.example.linktalk.model.CreateAccount
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val networkDataSource: NetWorkDataSource,
+    private val networkDataSource: NetworkDataSource,
     private val tokenManager: TokenManager,
     private val selfUserManager: SelfUserManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
