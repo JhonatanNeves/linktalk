@@ -2,9 +2,13 @@ package com.example.linktalk.data.repository
 
 import com.example.linktalk.model.CreateAccount
 import com.example.linktalk.model.Image
+import com.example.linktalk.model.User
+import kotlinx.coroutines.flow.Flow
 
 
 interface AuthRepository {
+
+    val currentUserFLow: Flow<User >
 
     suspend fun getAccessToken(): String?
 
