@@ -22,9 +22,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.linktalk.R
 import com.example.linktalk.model.Chat
+import com.example.linktalk.model.User
 import com.example.linktalk.model.fake.chat1
 import com.example.linktalk.model.fake.chat2
 import com.example.linktalk.model.fake.chat3
+import com.example.linktalk.model.fake.user1
+import com.example.linktalk.model.fake.user2
+import com.example.linktalk.model.fake.user3
+import com.example.linktalk.model.fake.user4
 import com.example.linktalk.ui.components.AnimatedContent
 import com.example.linktalk.ui.components.ChatItem
 import com.example.linktalk.ui.components.GeneralError
@@ -41,9 +46,11 @@ fun ChatsRoute(
     viewModel: ChatsViewModel = hiltViewModel(),
     navigateToChatDetail: (Chat) -> Unit
 ) {
+    val user by viewModel.currentUserFlow.collectAsStateWithLifecycle()
     val chatsListUiState by viewModel.chatsListUiState.collectAsStateWithLifecycle()
 
     ChatsScreen(
+        user = user,
         chatsListUiState = chatsListUiState,
         onTryAgainClick = {
             viewModel.getChats(isRefresh = true)
@@ -55,6 +62,7 @@ fun ChatsRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatsScreen(
+    user: User?,
     chatsListUiState: ChatsViewModel.ChatsListUiState,
     onTryAgainClick: () -> Unit,
     onChatClick: (Chat) -> Unit,
@@ -67,7 +75,7 @@ fun ChatsScreen(
                         text = AnnotatedString.fromHtml(
                             stringResource(
                                 R.string.feature_chats_greeting,
-                                "Jhonatan"
+                                user?.firstName ?: ""
                             )
                         ),
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -173,6 +181,7 @@ fun ChatsListContent(
 private fun ChatsScreenLoadingPreview() {
     LinkTalkTheme {
         ChatsScreen(
+            user = user1,
             chatsListUiState = ChatsViewModel.ChatsListUiState.Loading,
             onTryAgainClick = {},
             onChatClick = {},
@@ -186,6 +195,7 @@ private fun ChatsScreenLoadingPreview() {
 private fun ChatsScreenSuccessPreview() {
     LinkTalkTheme {
         ChatsScreen(
+            user = user3,
             chatsListUiState = ChatsViewModel.ChatsListUiState.Success(
                 chats = listOf(
                     chat1,
@@ -205,6 +215,7 @@ private fun ChatsScreenSuccessPreview() {
 private fun ChatsScreenSuccessEmptyPreview() {
     LinkTalkTheme {
         ChatsScreen(
+            user4,
             chatsListUiState = ChatsViewModel.ChatsListUiState.Success(
                 chats = emptyList(),
             ),
@@ -220,6 +231,7 @@ private fun ChatsScreenSuccessEmptyPreview() {
 private fun ChatsScreenErrorPreview() {
     LinkTalkTheme {
         ChatsScreen(
+            user2,
             chatsListUiState = ChatsViewModel.ChatsListUiState.Error,
             onTryAgainClick = {},
             onChatClick = {}

@@ -3,13 +3,18 @@ package com.example.linktalk.data.repository
 import com.example.linktalk.data.di.IoDispatcher
 import com.example.linktalk.data.manager.selfuser.SelfUserManager
 import com.example.linktalk.data.manager.token.TokenManager
+import com.example.linktalk.data.mapper.asDomainModel
 import com.example.linktalk.data.network.NetworkDataSource
 import com.example.linktalk.data.network.model.AuthRequest
 import com.example.linktalk.data.network.model.CreatAccountRequest
 import com.example.linktalk.model.CreateAccount
 import com.example.linktalk.model.Image
+import com.example.linktalk.model.User
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -19,6 +24,15 @@ class AuthRepositoryImpl @Inject constructor(
     private val selfUserManager: SelfUserManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AuthRepository {
+
+    override val currentUserFLow: Flow<User>
+        get() = selfUserManager
+            .selfUserFlow
+            .flowOn(ioDispatcher)
+            .map {
+                it.asDomainModel()
+            }
+
 
     //CryptoManager foi criado apenas para validar a arquitetura e as funcionalidades básicas do Jetpack Security com EncryptedSharedPreferences
 
@@ -59,6 +73,8 @@ class AuthRepositoryImpl @Inject constructor(
                 )
 
                 tokenManager.saveAccessToken(tokenResponse.token)
+
+                authenticate().getOrThrow()
             }
         }
     }
