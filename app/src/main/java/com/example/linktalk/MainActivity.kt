@@ -1,5 +1,6 @@
 package com.example.linktalk
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +31,23 @@ class MainActivity : ComponentActivity() {
                 ChatApp(
                     navigationState = navigationState,
                 )
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        if (intent.action == Intent.ACTION_VIEW && intent.data != null && intent.data!!.scheme == "linktalk") {
+            val data = intent.data!!
+            when (data.host) {
+                "chat_detail" -> {
+                    val userId = data.lastPathSegment?.toInt() ?: return
+                    navController.navigate(Route.ChatDetailRoute(userId))
+                }
             }
         }
     }

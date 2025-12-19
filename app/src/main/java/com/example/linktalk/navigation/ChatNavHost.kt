@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navOptions
 import com.example.linktalk.navigation.extension.slidOutTo
 import com.example.linktalk.navigation.extension.slideInTo
@@ -16,6 +17,7 @@ import com.example.linktalk.ui.feature.signup.SignUpRoute
 import com.example.linktalk.ui.feature.splash.SplashRoute
 import com.example.linktalk.ui.feature.users.UsersRoute
 
+const val CHAT_BASE_DETAIL_URI = "linktalk://chat_detail"
 @Composable
 fun ChatNavHost(
     navigationState: LinkTalkNavigationState
@@ -103,7 +105,13 @@ fun ChatNavHost(
             )
         }
 
-        composable<Route.ChatDetailRoute>{
+        composable<Route.ChatDetailRoute>(
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "$CHAT_BASE_DETAIL_URI/{userId}"
+                }
+            )
+        ){
             ChatDetailRoute(
                 navigateBack = {
                     navController.popBackStack()
