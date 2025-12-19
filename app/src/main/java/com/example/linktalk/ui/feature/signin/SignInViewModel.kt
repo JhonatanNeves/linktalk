@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.linktalk.R
 import com.example.linktalk.data.repository.AuthRepository
-import com.example.linktalk.model.NetWorkException
-import com.example.linktalk.ui.validator.FormValidator
+import com.example.linktalk.model.NetworkException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -63,7 +62,7 @@ class SignInViewModel @Inject constructor(
                     onFailure = {
                         formState = formState.copy(isLoading = false)
 
-                        val error = if (it is NetWorkException.ApiException && it.statusCode == 401) {
+                        val error = if (it is NetworkException.ApiException && it.statusCode == 401) {
                             SignInAction.Error.UnauthorizedError
                         } else {
                             SignInAction.Error.GenericError

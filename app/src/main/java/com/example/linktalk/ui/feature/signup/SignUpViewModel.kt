@@ -11,7 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.linktalk.R
 import com.example.linktalk.data.repository.AuthRepository
 import com.example.linktalk.model.CreateAccount
-import com.example.linktalk.model.NetWorkException
+import com.example.linktalk.model.NetworkException
 import com.example.linktalk.ui.validator.FormValidator
 import com.example.linktalk.util.image.ImageCompressor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -147,7 +147,7 @@ class SignUpViewModel @Inject constructor(
                     onFailure = {
                         formState = formState.copy(
                             isLoading = false,
-                            apiErrorMessageResId = if (it is NetWorkException.ApiException) {
+                            apiErrorMessageResId = if (it is NetworkException.ApiException) {
                                 when (it.statusCode) {
                                     400 -> R.string.error_message_api_form_validation_failed
                                     409 -> R.string.error_message_user_with_username_already_exists
