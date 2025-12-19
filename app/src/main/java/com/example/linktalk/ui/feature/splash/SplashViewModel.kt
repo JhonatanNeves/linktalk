@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.linktalk.data.repository.AuthRepository
-import com.example.linktalk.model.NetWorkException
+import com.example.linktalk.model.NetworkException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -39,7 +39,7 @@ class SplashViewModel @Inject constructor(
                     _authenticationState.emit(AuthenticationState.UserAuthenticated)
                 },
                 onFailure = {
-                    if (it is NetWorkException.ApiException && it.statusCode == 401) {
+                    if (it is NetworkException.ApiException && it.statusCode == 401) {
                         authRepository.clearAccessToken()
                         _authenticationState.emit(AuthenticationState.UserNotAuthenticated)
                     } else {
