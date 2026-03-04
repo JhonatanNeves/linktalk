@@ -31,6 +31,7 @@ securityCrypto = "1.1.0"
 constraintLayoutCompose = "1.1.1"
 room = "2.6.1"
 googleServices = "4.4.4"
+ui = "1.10.4"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -83,6 +84,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
