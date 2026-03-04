@@ -86,6 +86,13 @@ fun SplashScreen() {
             contentDescription = null,
         )
 
+        Text("by Jhonatan Neves",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier
+                .padding(start = 140.dp, top = 3.dp)
+        )
+
         Spacer(modifier = Modifier.height(77.dp))
 
         Row(

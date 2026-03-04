@@ -119,6 +119,12 @@ fun SingInScreen(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = null
         )
+        Text("by Jhonatan Neves",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier
+                .padding(start = 140.dp, top = 3.dp)
+        )
 
         Spacer(modifier = Modifier.height(78.dp))
 

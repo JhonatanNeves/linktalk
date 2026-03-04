@@ -23,4 +23,7 @@ sealed interface Route {
 
     @Serializable
     data class ChatDetailRoute(val userId: Int)
+
+    @Serializable
+    data object ProfileUserRoute
 }
