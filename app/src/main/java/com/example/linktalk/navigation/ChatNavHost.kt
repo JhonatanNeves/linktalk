@@ -12,6 +12,7 @@ import com.example.linktalk.navigation.extension.slideInTo
 import com.example.linktalk.ui.feature.chatdetail.ChatDetailRoute
 import com.example.linktalk.ui.feature.chats.ChatsRoute
 import com.example.linktalk.ui.feature.chats.navigateToChats
+import com.example.linktalk.ui.feature.profile.ProfileUserRoute
 import com.example.linktalk.ui.feature.signin.SignInRoute
 import com.example.linktalk.ui.feature.signup.SignUpRoute
 import com.example.linktalk.ui.feature.splash.SplashRoute
@@ -113,6 +114,14 @@ fun ChatNavHost(
             )
         ){
             ChatDetailRoute(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<Route.ProfileRoute> {
+            ProfileUserRoute(
                 navigateBack = {
                     navController.popBackStack()
                 }
